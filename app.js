@@ -2,14 +2,18 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const mongoose = require('mongoose');
-const dataBaseURL = require('./DB/config')
+const {dataBaseURL} = require('./DB/config')
 
-console.log(dataBaseURL)
-
-
-
-
-
+mongoose
+    .connect(dataBaseURL, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        autoIndex: true,
+    })
+    .then(() => {
+        console.log('Connected to mongoDB');
+        //start();
+    });
 
 
 
