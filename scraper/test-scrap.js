@@ -1,7 +1,7 @@
 const express = require('express')
 const {getPageContent} = require('./puppeteer');
 const mongoose = require('mongoose');
-const {card} = require('../DB/card')
+const {card} = require('../DB/card');
 
 const app = express()
 const port = 3000
@@ -14,9 +14,8 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-
 mongoose
-    .connect('mongodb+srv://qwerty:qwerty123@della-lardi.xs36u.mongodb.net/Della?retryWrites=true&w=majority', {
+    .connect('mongodb+srv://qwerty:@della-lardi.xs36u.mongodb.net/Della?retryWrites=true&w=majority', {
         useUnifiedTopology: true,
         useNewUrlParser: true,
         autoIndex: true,
@@ -25,7 +24,6 @@ mongoose
         console.log('Connected to mongoDB');
         //start();
     });
-console.log('qq')
 
 let SITE = 'https://della.com.ua/search';
 let ids = ['9221312153642559334'];
