@@ -4,9 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
     <title>Document</title>
 </head>
 <body>
-    test text
+    <div class="container" id="app">
+        <div class="nav-bar">
+            some keys
+        </div>
+        <!-- <div class="main">
+            <div class="card">
+                <div class="card_info">
+                    here mus be info about card
+                </div>
+                
+                <div class="card-keys">
+                    <button class="buttons">ok</button>
+                    <button class="buttons">yes</button>
+                    <button class="buttons">add</button>
+                    <button class="buttons">add</button>
+                </div>
+            </div>
+        </div> -->
+        <div id="app-4">
+            <ol>
+              <li v-for="value in todos">
+                {{ value }}
+              </li>
+            </ol>
+          </div>
+
+    </div>
 </body>
+<script type="module" src="frontend.js"></script>
 </html>
