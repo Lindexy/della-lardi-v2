@@ -2,7 +2,8 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const mongoose = require('mongoose');
-const {dataBaseURL} = require('./DB/config')
+const {dataBaseURL} = require('./DB/config');
+const {card} = require('./DB/card');
 
 mongoose
     .connect(dataBaseURL, {
@@ -16,6 +17,21 @@ mongoose
     });
 
 
+async function start() {
+    let data = await card.find({});
+    console.log(data);
+}
+
+
+
+
+
+
+
+app.get('/api/cards', async (req, res) => {
+    let data = await card.find({})
+    res.status(200).json(data)
+})
 
 app.use(express.static(path.resolve(__dirname, 'client')));
 
