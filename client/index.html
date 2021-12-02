@@ -5,36 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
+    <script src="https://unpkg.com/vue@next"></script>
     <title>Document</title>
 </head>
 <body>
-    <div class="container" id="app">
-        <div class="nav-bar">
-            some keys
-        </div>
-        <!-- <div class="main">
-            <div class="card">
-                <div class="card_info">
-                    here mus be info about card
-                </div>
-                
-                <div class="card-keys">
-                    <button class="buttons">ok</button>
-                    <button class="buttons">yes</button>
-                    <button class="buttons">add</button>
-                    <button class="buttons">add</button>
+    <div id="app">
+        <div class="container">
+            <div class="nav">
+                nav
+            </div>
+            <div class="filters">
+                Filters
+            </div>
+            <div class="main">
+                <div class="card" v-for="card in cards">
+                    {{ card.dateFrom }} {{ card.dateTo }} {{card.bodyTypeId}}
+                    <br>
+                    {{ card.waypointListSource[0].townName }} 
+                    <div class="card_buttons">
+                        <button class="button">button 1</button>
+                        <button class="button">button 2</button>
+                        <button class="button">button 3</button>
+                        <button class="button">button 4</button>
+                        <button class="button">button 5</button>
+                        <button class="button">button 6</button>
+                    </div>
                 </div>
             </div>
-        </div> -->
-        <div  id="app-4">
-            <div v-for="value in cards">
-                <div class="card">
-                    {{ value }}
-                </div>
-            </div>
-        </div>
-
+         </div>  
+        
+        
     </div>
+
+
+
+    <script src="frontend.js"></script>
 </body>
-<script type="module" src="frontend.js"></script>
 </html>
