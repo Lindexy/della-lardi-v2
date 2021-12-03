@@ -20,4 +20,4 @@ let cardSchema = mongoose.Schema({
 
 let card = mongoose.model('card', cardSchema);
 
-module.exports = {card}
+module.exports = card

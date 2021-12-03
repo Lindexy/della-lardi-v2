@@ -1,29 +1,23 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-const {dataBaseURL} = require('./DB/config');
-const {card} = require('./models/card');
+const dataBaseURL = require('./config');
+const card = require('./models/card');
 const {serverSettings} = require('./models/server')
 
+const apiRouter = require('./routes/apiRouter');
+const homeRouter = require('./routes/homeRouter');
+
+
 const app = express();
+// робимо папку 'client' статичною
+app.use(express.static(path.resolve(__dirname, 'client')));
 
-mongoose
-    .connect(dataBaseURL, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        autoIndex: true,
-    })
-    .then(() => {
-        console.log('Connected to mongoDB');
-        //start();
-    });
+app.use('/', homeRouter)
+app.use('/api', apiRouter)
 
 
 
-async function start() {
-    let data = await card.find({});
-    console.log(data);
-}
 
 // testing request from client
 app.get('/api/on', async (req, res) => {
@@ -35,20 +29,28 @@ app.get('/api/on', async (req, res) => {
 
 
 
-app.get('/api/cards', async (req, res) => {
+/* app.get('/api/cards', async (req, res) => {
     let data = await card.find({})
     res.status(200).json(data)
-})
+}) */
 
-app.use(express.static(path.resolve(__dirname, 'client')));
 
-app.get('*', (req, res) => {
+
+/* app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'index.html'))
-})
-
-app.listen(3000, () => console.log('server started'))
+}) */
 
 
+
+mongoose.connect(dataBaseURL, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+            autoIndex: true,
+        })
+        .then(() => {
+            console.log('Connected to mongoDB');
+            app.listen(3000, () => console.log('server started'))
+        });
 
 
 
