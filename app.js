@@ -1,9 +1,11 @@
 const express = require('express');
 const path = require('path');
-const app = express();
 const mongoose = require('mongoose');
 const {dataBaseURL} = require('./DB/config');
-const {card} = require('./DB/card');
+const {card} = require('./models/card');
+const {serverSettings} = require('./models/server')
+
+const app = express();
 
 mongoose
     .connect(dataBaseURL, {
@@ -17,12 +19,17 @@ mongoose
     });
 
 
+
 async function start() {
     let data = await card.find({});
     console.log(data);
 }
 
-
+// testing request from client
+app.get('/api/on', async (req, res) => {
+    console.log(req.query)
+    //let data = await serverSettings.updateOne({ _id: '61a9e5936978c794bb685d4b'}, {scraping: false})
+})
 
 
 
@@ -40,3 +47,26 @@ app.get('*', (req, res) => {
 })
 
 app.listen(3000, () => console.log('server started'))
+
+
+
+
+
+
+
+
+
+
+
+
+/* let test = {
+    scraping: true
+}
+let create = serverSettings(test)
+
+create.save((err, user) => {
+    if (err) {
+      console.log('err', err)
+    }
+    console.log('saved user', user)
+  }) */
