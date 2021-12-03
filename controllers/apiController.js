@@ -8,3 +8,11 @@ exports.showCards = async function (req, res) {
 exports.hello = function (req, res) {
     res.send("Вы попали в API");
 }
+
+exports.scraper = function (req, res) {
+    res.send("change scraping setings");
+}
+
+exports.scraperStatus = function (req, res) {
+    res.send('Scraper status')
+}

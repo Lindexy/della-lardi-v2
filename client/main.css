@@ -47,3 +47,10 @@
   margin-right: 5px;
   padding: 3px;
 }
+.scraper {
+  width: 100px;
+  border: blue 2px solid;
+}
+.scraper input {
+  margin: 0 5px;
+}
