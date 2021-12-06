@@ -1,39 +1,32 @@
+
+
+
+
 const App = {
     data() {
         return {
             cards: []
         }
     },
+
     async mounted() {
         this.cards = await request('api/cards')
     }
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Vue.createApp(App).mount('#app')
+
+
+
+
+
+
+
+
+
+
+
 
 
 async function request(url, method = 'GET', data = null) {
