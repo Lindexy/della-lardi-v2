@@ -4,8 +4,8 @@ const apiRouter = express.Router();
 
 apiRouter.get('/cards', apiController.showCards);
 
-apiRouter.post('/scraper', apiController.scraper);
-apiRouter.get('/scraper', apiController.scraperStatus);
+apiRouter.post('/settings', apiController.settingsSet);
+apiRouter.get('/settings', apiController.settingsRequest);
 
 apiRouter.get('/', apiController.hello);
 

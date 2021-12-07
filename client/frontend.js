@@ -1,33 +1,28 @@
-
-
-
-
 const App = {
     data() {
         return {
+            serverSettings: {},
             cards: []
         }
     },
+    methods: {
+        async serverSettingsChek() {
+            this.serverSettings = await request('api/settings')
+        },
+        async serverSettingsUpdate() {
+            let response = await request('api/settings', 'POST', this.serverSettings)
+            console.log(response)
+        }
 
+    },
     async mounted() {
-        this.cards = await request('api/cards')
+        this.cards = await request('api/cards');
+        this.serverSettingsChek()
+        
     }
-
 }
 
 Vue.createApp(App).mount('#app')
-
-
-
-
-
-
-
-
-
-
-
-
 
 async function request(url, method = 'GET', data = null) {
     try {

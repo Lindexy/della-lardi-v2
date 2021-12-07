@@ -7,4 +7,4 @@ let serveSchema = mongoose.Schema({
 
 let serverSettings = mongoose.model('serverSettings', serveSchema);
 
-module.exports = { serverSettings }
+module.exports = serverSettings
