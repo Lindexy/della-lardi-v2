@@ -14,7 +14,19 @@ let cardSchema = mongoose.Schema({
   sizeMassTo: String,
   sizeVolumeTo: String,
   waypointListSource: [],
-  waypointListTarget: []
+  waypointListTarget: [],
+  agreedPub: {
+    type: Boolean,
+    default: false,
+  },
+  published: {
+    type: Boolean,
+    default: false,
+  },
+  created: {
+    type: Date,
+    default: Date.now
+  }
   //dellaInfo: mongoose.Schema.Types.Mixed,
 })
 

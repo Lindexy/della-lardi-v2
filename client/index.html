@@ -12,7 +12,7 @@
 <body>
     <div id="app">
         <div class="container">
-            <div class="nav">
+            <div class="nav" v-on:change='serverSettingsUpdate'>
                 <div class="radio">
                     <div>Scraper status:</div>
                     <input type="radio" id="scraperOn" value="true" v-model="serverSettings.scraping"/>
@@ -27,21 +27,25 @@
                     <input type="radio" name="sender" id="senderOff" value="Off">
                     <label for="senderOff">Off</label>
                 </div>
-                <button v-on:click="serverSettingsUpdate">send settings</button>
-                
             </div>
             <div class="filters">
+                <button v-on:click="deleteAllCards">delete all cards</button>
                 Filters
+                <div class="search">
+                    <input type="text" v-model='search'>
+                </div>
             </div>
             <div class="main">
-                <div class="card" v-for="card in cards">
-                    {{ card.dateFrom }} {{ card.dateTo }} {{card.bodyTypeId}}
+                <div class="card" v-for="(card, index) in cards" :key="index">
+                    {{ card.dateFrom.substring(8, 10) + '.' + card.dateFrom.substring(5, 7) }}
+                    {{ card.dateTo ? ' - ' + card.dateTo.substring(8, 10) + '.' + + card.dateFrom.substring(5, 7) : '' }}
+                    {{ card.bodyTypeId }}
                     <br>
-                    {{ card.waypointListSource[0].townName }} 
+                    {{ card.waypointListSource[0].townName }}
                     <div class="card_buttons">
-                        <button class="button">button 1</button>
-                        <button class="button">button 2</button>
-                        <button class="button">button 3</button>
+                        <button :class="card.agreedPub ? 'green' : 'red' " v-on:click="updateCard(index)">Добавити</button>
+                        <button>button 2</button>
+                        <button>button 3</button>
                         <button class="button">button 4</button>
                         <button class="button">button 5</button>
                         <button class="button">button 6</button>

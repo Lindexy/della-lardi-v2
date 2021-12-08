@@ -1,8 +1,9 @@
 const App = {
     data() {
         return {
+            search: '',
             serverSettings: {},
-            cards: []
+            cards: [],
         }
     },
     methods: {
@@ -11,13 +12,19 @@ const App = {
         },
         async serverSettingsUpdate() {
             let response = await request('api/settings', 'POST', this.serverSettings)
-            console.log(response)
-        }
-
+        },
+        async updateCard(i) {
+            this.cards[i].agreedPub = !this.cards[i].agreedPub;
+            let response = await request('api/cards/update', 'POST', this.cards[i])
+        },
+        async deleteAllCards() {
+            console.log('function not done')
+        },
     },
     async mounted() {
         this.cards = await request('api/cards');
-        this.serverSettingsChek()
+        this.serverSettingsChek();
+
         
     }
 }

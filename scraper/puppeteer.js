@@ -14,7 +14,7 @@ async function getPageContent(url, ids) {
   const browser = await puppeteer.launch(LAUNCH_PUPPETEER_OPTS);
   const page = await browser.newPage();
   
-  const cookiesString = await fs.readFile('./cookie/cookies.json');
+  const cookiesString = await fs.readFile('./scraper/cookie/cookies.json');
   const cookies = JSON.parse(cookiesString);
   // Фукція допису ІД
   cookies.push({
@@ -192,69 +192,8 @@ async function getPageContent(url, ids) {
   
       // Тип машини
   
-      let bodyGroupIdSourse = targetCard.querySelector('.truck_type').textContent;
-      switch(bodyGroupIdSourse) {
-          case 'тент':
-              fraht.bodyTypeId = '34';
-              break;
-          case 'будь-яка':
-              fraht.bodyGroupId = '1';
-              break;
-          case 'крита':
-              fraht.bodyGroupId = '1';
-              break;
-          case 'відкрита':
-              fraht.bodyGroupId = '2';
-              break;
-          case 'рефрижератор':
-              fraht.bodyTypeId = '32';
-              break;
-          case 'тагач':
-              fraht.bodyTypeId = '70';
-              break;
-          case 'ізотерм':
-              fraht.bodyTypeId = '25';
-              break;
-          case 'цільнометал.':
-              fraht.bodyTypeId = '36';
-              break;
-          case 'автовоз':
-              fraht.bodyTypeId = '20';
-              break;
-          case 'бортова':
-              fraht.bodyTypeId = '63';
-              break;
-          case 'зерновоз':
-              fraht.bodyTypeId = '26';
-              break;
-          case 'контейнеровіз':
-              fraht.bodyTypeId = '28';
-              break;
-          case 'лісовоз':
-              fraht.bodyTypeId = '42';
-              break;
-          case 'негабарит':
-              fraht.bodyTypeId = '30';
-              break;
-          case 'платформа':
-              fraht.bodyTypeId = '64';
-              break;
-          case 'самоскид':
-              fraht.bodyTypeId = '33';
-              break;
-          case 'трал':
-              fraht.bodyTypeId = '30';
-              break;
-          case 'мікроавтобус':
-              fraht.bodyTypeId = '57';
-              break;
-          case 'контейнер пустий':
-              fraht.bodyTypeId = '27';
-              break;
-          default:
-              console.log('Невідомий тип транспорту - написати Олександру Миколайовичу');
-  
-      }
+      fraht.bodyTypeId = targetCard.querySelector('.truck_type').textContent;
+      
   
       // Ціна
   
@@ -379,4 +318,4 @@ function sleep(ms) {
       setTimeout(resolve, ms);
 });
 }
-module.exports = {getPageContent};
+module.exports = getPageContent;
