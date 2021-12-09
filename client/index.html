@@ -34,14 +34,16 @@
                 <div class="search">
                     <input type="text" v-model='search'>
                 </div>
+                {{ search }}
             </div>
             <div class="main">
-                <div class="card" v-for="(card, index) in cards" :key="index">
+                <div class="card" v-for="(card, index) in filteredCards" :key="index">
                     {{ card.dateFrom.substring(8, 10) + '.' + card.dateFrom.substring(5, 7) }}
                     {{ card.dateTo ? ' - ' + card.dateTo.substring(8, 10) + '.' + + card.dateFrom.substring(5, 7) : '' }}
                     {{ card.bodyTypeId }}
                     <br>
                     {{ card.waypointListSource[0].townName }}
+                    
                     <div class="card_buttons">
                         <button :class="card.agreedPub ? 'green' : 'red' " v-on:click="updateCard(index)">Добавити</button>
                         <button>button 2</button>

@@ -29,7 +29,8 @@ mongoose.connect(dataBaseURL, {
         .then(() => {
             console.log('Connected to mongoDB');
             app.listen(3000, () => console.log('server started'));
-            mainCycle();
+            setInterval(() => mainCycle(), 30000)
+            
         });
 
 let SITE = 'https://della.com.ua/search';
@@ -37,6 +38,8 @@ let ids = ['9221312153642559334'];
 
 async function mainCycle(){
   let setup = await serverSettings.find({ _id: '61a9e5936978c794bb685d4b' });
+
+  //await card.deleteMany({})
   //console.log(setup);
   if (setup[0].scraping === true) {
     console.log('scraping on');
@@ -44,7 +47,7 @@ async function mainCycle(){
     for (let i = 0; i < data.length; i++) {
       let test = new card(data[i])
       test.save((err, info) => {
-          if (err) { console.log('err', err) }
+          //if (err) { console.log('err') }
         })
     }
   }

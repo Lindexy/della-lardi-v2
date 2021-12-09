@@ -4,6 +4,7 @@ const App = {
             search: '',
             serverSettings: {},
             cards: [],
+            shownCards: [],
         }
     },
     methods: {
@@ -17,14 +18,42 @@ const App = {
             this.cards[i].agreedPub = !this.cards[i].agreedPub;
             let response = await request('api/cards/update', 'POST', this.cards[i])
         },
+        async updateAllCards() {
+            let data = await request('api/cards');
+            for (let i = 0; i < data.length; i++) {
+                if (this.cards.some(item => item.idDella === data[i].idDella)) {
+                } else {
+                    
+                    this.cards.push(data[i]);
+                    
+                }
+            }
+            console.log('updeted');
+        },
+        async updateAllCardsV2() {
+            this.cards = await request('api/cards');
+        },
         async deleteAllCards() {
-            console.log('function not done')
+            let test = JSON.stringify(this.cards[0])
+            console.log(test)
         },
     },
+    computed: {
+        filteredCards() {
+            let self = this
+            const filtered = this.cards.filter(function(card) {
+                return JSON.stringify(card).toLowerCase().indexOf(self.search.toLowerCase()) > -1
+            })
+            return filtered
+        }
+    },
     async mounted() {
-        this.cards = await request('api/cards');
-        this.serverSettingsChek();
+        this.updateAllCardsV2()
+        const timer = setInterval(() => {
+            this.updateAllCardsV2();
+          }, 10000);
 
+        this.serverSettingsChek();
         
     }
 }
