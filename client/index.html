@@ -34,13 +34,20 @@
                 <div class="search">
                     <input type="text" v-model='search'>
                 </div>
-                {{ search }}
             </div>
             <div class="main">
                 <div class="card" v-for="(card, index) in filteredCards" :key="index">
-                    {{ card.dateFrom.substring(8, 10) + '.' + card.dateFrom.substring(5, 7) }}
-                    {{ card.dateTo ? ' - ' + card.dateTo.substring(8, 10) + '.' + + card.dateFrom.substring(5, 7) : '' }}
-                    {{ card.bodyTypeId }}
+                    <div class="card-date">
+                        {{ card.dateFrom.substring(8, 10) + '.' + card.dateFrom.substring(5, 7) }}
+                        {{ card.dateTo ? ' - ' + card.dateTo.substring(8, 10) + '.' + + card.dateFrom.substring(5, 7) : '' }}
+                    </div>
+                    <div class="card-car_type">
+                        {{ card.bodyTypeId }}
+                    </div>
+                    
+                    {{ card.contentName }}
+                    {{ card.note }}
+                    
                     <br>
                     {{ card.waypointListSource[0].townName }}
                     
