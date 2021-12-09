@@ -55,11 +55,15 @@ async function getPageContent(url, ids) {
     function extract(targetCard) {
       let fraht = {};
 
+
       if (targetCard.matches('.deleted')) {
         fraht.dellaStatus = 1;
       }
-  
+      
+      
       fraht.idDella = targetCard.getAttribute('data-request_id');
+
+      fraht.url = 'https://della.com.ua' + targetCard.querySelector('.request_distance').getAttribute('href')
   
       // Дата
       let dateFrom1 = targetCard.querySelector('.date_add').innerHTML.substring(4,6);
@@ -107,15 +111,15 @@ async function getPageContent(url, ids) {
   
       loadTypesSource = targetCard.querySelector('.request_tags');
       if (loadTypesSource !== null){
-          fraht.loadTypes = [];
+          fraht.loadTypes = '';
           if (loadTypesSource.textContent.includes('Збоку')){
-              fraht.loadTypes.push(25)
+              fraht.loadTypes += 'Збоку '
           }
           if (loadTypesSource.textContent.includes('Зверху')){
-              fraht.loadTypes.push(24)
+            fraht.loadTypes += 'Зверху '
           }
           if (loadTypesSource.textContent.includes('Задня')){
-              fraht.loadTypes.push(26)
+            fraht.loadTypes += 'Задня '
           }
           // Кількість мість погрузки\вигрузки
           if (loadTypesSource.textContent.includes('Місць')){
@@ -210,21 +214,7 @@ async function getPageContent(url, ids) {
       // Доп. умови оплати
   
       if (targetCard.querySelector('.price_tags') !==null) {
-          paymentsTagsSource = targetCard.querySelector('.price_tags').innerHTML;
-          if (paymentsTagsSource.includes('При розвантаженні')) {
-              fraht.paymentMomentId = '4';
-          } else if (paymentsTagsSource.includes('При завантаженні')){
-              fraht.paymentMomentId = '2';
-          }
-          if (paymentsTagsSource.includes('На картку')) {
-              fraht.paymentTypeId = '10';
-          } else if (paymentsTagsSource.includes('Б/г')) {
-              fraht.paymentTypeId = '4';
-          } else if (paymentsTagsSource.includes('Готівка')) {
-              fraht.paymentTypeId = '2';
-          } else if (paymentsTagsSource.includes('Софт')) {
-              fraht.paymentTypeId = '10';
-          }
+          fraht.payment = targetCard.querySelector('.price_tags').textContent;
       }
       
       // Вага
