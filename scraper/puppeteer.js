@@ -85,7 +85,7 @@ async function getPageContent(url, ids) {
   
       let paletSource = targetCard.querySelector('.request_text').childNodes;
       for (let i = 0; i < paletSource.length; i++) {
-          if (paletSource[i].textContent.includes('кільк. палет')) {
+          if (paletSource[i].textContent.includes('кільк. палет:')) {
               fraht.note += 'палет ' + paletSource[i + 1].textContent + ' ';
           }
   
