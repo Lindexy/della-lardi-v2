@@ -37,6 +37,13 @@ const App = {
             let test = JSON.stringify(this.cards[0])
             console.log(test)
         },
+        parseWaypoint(arr) {
+            let result = ''
+            for (let i = 0; i < arr.length; i++) {
+                result += arr[i].townName + '   '
+            }
+            return result
+        }
     },
     computed: {
         filteredCards() {
