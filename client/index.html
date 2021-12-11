@@ -15,14 +15,14 @@
         <div class="container">
             <div class="nav" v-on:change='serverSettingsUpdate'>
                 <div class="radio">
-                    <div>Scraper status:</div>
+                    <div>Scraper:</div>
                     <input type="radio" id="scraperOn" value="true" v-model="serverSettings.scraping"/>
                     <label for="scraperOn">On</label>
                     <input type="radio" id="scraperOff" value="false" v-model="serverSettings.scraping">
                     <label for="scraperOff">Off</label>
                 </div>
                 <div class="radio">
-                    <div>Sender status:</div>
+                    <div>Sender:</div>
                     <input type="radio" name="sender" id="senderOn" value="On">
                     <label for="senderOn">On</label>
                     <input type="radio" name="sender" id="senderOff" value="Off">
@@ -72,7 +72,15 @@
                                 шир: {{ card.sizeWidth }}
                                 вис: {{ card.sizeHeight }}
                             </div>
+                            {{ card.sizeVolumeFrom }}
+                            {{ card.sizeVolumeTo }}
                             
+                        </div>
+                        <div class="card_truck">
+                            <div class="card-car_type">
+                                {{ card.bodyTypeId }}
+                            </div>      
+                            {{ card.loadTypes }}
                         </div>
                         <div class="card_money">
                             {{ card.paymentPrice }}
@@ -81,16 +89,8 @@
                             
                         </div>
                     </div>
-                    
-                    <div class="card-car_type">
-                        {{ card.bodyTypeId }}
-                    </div>                 
-
-                    {{ card.loadTypes }}
-
-                    {{ card.sizeVolumeFrom }}
-                    {{ card.sizeVolumeTo }}
                     <div class="card_buttons">
+                        <hr>
                         <button :class="card.agreedPub ? 'green' : 'red' " v-on:click="updateCard(index)">Добавити</button>
                         <a v-bind:href="card.url" target="_blank">
                             <button >Відкрити</button>
