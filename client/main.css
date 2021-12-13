@@ -39,11 +39,9 @@ body {
 }
 .card {
   background-color: white;
-  position: relative;
-  height: 200px;
   width: 100%;
-  padding: 3px 5px;
-  margin: 7px;
+  padding: 10px;
+  margin: 7px 0;
   border: rgb(173, 173, 173) solid 1px;
   border-radius: 5px;
   box-shadow: 2px 2px 5px rgb(146, 146, 146);
@@ -52,9 +50,12 @@ body {
   background-color: rgb(252, 225, 225);
 }
 .card_first-row {
+  height: 40px;
+  padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: grey solid 1px;
 }
 .card-date {
   font-weight: 700;
@@ -62,34 +63,58 @@ body {
 }
 .card_waypoint {
   font-weight: 500;
-  font-size: 20px;
+  font-size: 24px;
 }
 .card_updated {
   width: 130px;
 }
 .card_main {
+  min-height: 100px;
   padding: 15px 10px;
   display: flex;
   justify-content: space-between;
 }
+.card_truck {
+  display: flex;
+  justify-content: start;
+  align-items: flex-start;
+  width: 200px;
+}
+.card_truck_info {
+  margin-left: 5px;
+}
+.card_cargo_info_name {
+  font-weight: 500;
+  font-size: 20px;
+}
 .card_cargo {
-  border: 1px solid rgb(199, 199, 199);
+  width: 300px;
 }
-.card_money {
-  border: 1px solid rgb(199, 199, 199);
-  width: 150px;
-  height: 100%;
+.card_footer {
+  height: 40px;
+  width: 974px;
+  padding: 0 10px;
+  border-top: solid grey 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.card_buttons {
-  width: 100%;
-  position: absolute;
-  bottom: 5px;
+.card_footer_bottons {
+  display: flex;
+  align-items: center;
 }
-.card_buttons button {
-  width: 85px;
-  height: 35px;
+.card_footer_bottons button {
   margin-right: 5px;
   padding: 3px;
+}
+.card_footer_money {
+  display: flex;
+}
+.card_footer_money_price {
+  min-width: 100px;
+  text-align: end;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 .radio {
