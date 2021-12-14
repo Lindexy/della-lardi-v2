@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs').promises;
 
 const LAUNCH_PUPPETEER_OPTS = {
-  headless: false,
+  headless: true,
   defaultViewport: null,
   args: ["--window-size=1920x1080"]
 };
@@ -57,7 +57,7 @@ async function getPageContent(url, ids) {
 
 
       if (targetCard.matches('.deleted')) {
-        fraht.dellaStatus = 1;
+        fraht.closed = true;
       }
       
       

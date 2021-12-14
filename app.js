@@ -7,7 +7,8 @@ const getPageContent = require('./scraper/puppeteer')
 const apiRouter = require('./routes/apiRouter');
 const homeRouter = require('./routes/homeRouter');
 const card = require('./models/card');
-const serverSettings = require('./models/serverSettings')
+const serverSettings = require('./models/serverSettings');
+const res = require('express/lib/response');
 
 
 const app = express();
@@ -52,21 +53,60 @@ async function mainCycle(){
     }
   }
 
-  
+  updateData()
+}
+// актуалізація данних
+// получаємо всі карти з БД
+// відправляємо на перевірку по 200 штук
+// після того як перевірили всі чекаємо мінуту, поченаємо заново
+
+
+async function updateData() {
+  console.log('updating...')
+  let data = await card.find({});
+  for (let i = 0; i < data.length / 200; i++) {
+    let arr =  data.slice(i * 200, (i * 200) + 200);
+    let arr2 = [];
+    for (let j = 0; j < arr.length; j++) {
+      arr2.push(arr[j].idDella)
+    }
+    url = 'https://della.com.ua/my/selected/';
+    let result = await getPageContent(url, arr2);
+    for (let k = 0; k < arr2.length; k++) {
+      let currentCard = result.find(item => item.idDella === arr2[k]);
+      
+      if (currentCard !== undefined) {
+        let res = await card.updateOne({ idDella: currentCard.idDella }, { currentCard })
+        if (res.acknowledged !== false) {
+          console.log('updated: ' + currentCard)
+        }
+       
+      } else {
+        await card.deleteOne({ idDella: arr2[k].idDella })
+        console.log('Карту видале з БД так як її нема на Делл ' + arr2[k].idDella)
+      }
+
+
+
+      /* if (result.find(el => el.idDella === arr2[k]) === undefined) {
+        await card.deleteOne({ idDella: arr2[k]})
+        console.log('Карту видале з БД так як її нема на Делл ' + arr2[k])
+      } */
+      
+    }
+  }
+
 }
 
 
-
-
-
-
-
-
-/* let create = serverSettings(test)
-
-create.save((err, user) => {
-    if (err) {
-      console.log('err', err)
-    }
-    console.log('saved user', user)
-  }) */
+//check()
+async function check() {
+  // перевіряємо чи є така карта на делі - якщо нема вказуємо це БД
+  // перевіріяємо чи заказ на делі співпадає з БД
+  // якщо да змінюємо дату оновлення
+  // якщо ні оновлюємо запис в ДБ
+  url = 'https://della.com.ua/my/selected/';
+  id = ['9221346091603037730', '9221345172244194423', '21342100958994001'];
+  let data = await getPageContent(url, id)
+  console.log(data)
+}

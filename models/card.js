@@ -1,7 +1,6 @@
 let mongoose = require('mongoose');
 
 let cardSchema = mongoose.Schema({
-  dellaStatus: Number,
   idDella: {type: String, required: true, unique: true},
   url: String,
   dateFrom: String,
@@ -26,7 +25,15 @@ let cardSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  closed: {
+    type: Boolean,
+    default: false,
+  },
   published: {
+    type: Boolean,
+    default: false,
+  },
+  deleted: {
     type: Boolean,
     default: false,
   },
@@ -34,6 +41,7 @@ let cardSchema = mongoose.Schema({
     type: Date,
     default: Date.now
   }
+  
   //dellaInfo: mongoose.Schema.Types.Mixed,
 })
 
