@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs').promises;
 
 const LAUNCH_PUPPETEER_OPTS = {
-  headless: true,
+  headless: false,
   defaultViewport: null,
   args: ["--window-size=1920x1080"]
 };
@@ -22,7 +22,7 @@ async function getPageContent(url, ids) {
     "value": ids.join('-'),
     "domain": ".della.com.ua",
     "path": "/",
-    "expires": 1637667393,
+    //"expires": 1642082989.676829,
     "size": 28,
     "httpOnly": false,
     "secure": false,
@@ -36,7 +36,7 @@ async function getPageContent(url, ids) {
   await page.setCookie(...cookies);
   await page.goto(url);
   
-  //await sleep(15000)
+  //await sleep(60000)
 
   // Передаємо на сайт код який створить і поверне масив обєктів з всіма данними фрахтів. 
   let data = await page.evaluate(() => {
