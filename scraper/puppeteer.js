@@ -214,7 +214,7 @@ async function getPageContent(url, ids) {
       // Доп. умови оплати
   
       if (targetCard.querySelector('.price_tags') !==null) {
-          fraht.payment = targetCard.querySelector('.price_tags').textContent;
+          fraht.payment = targetCard.querySelector('.price_tags').textContent.replace(/\n/g, '');
       }
       
       // Вага
