@@ -33,6 +33,10 @@ let cardSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  needToUpdate: {
+    type: Boolean,
+    default: false,
+  },
   deleted: {
     type: Boolean,
     default: false,

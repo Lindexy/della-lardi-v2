@@ -21,6 +21,8 @@ app.use(express.urlencoded({extended: true}))
 app.use('/', homeRouter)
 app.use('/api', apiRouter)
 
+const port = process.env.PORT || 3000;
+
 
 mongoose.connect(dataBaseURL, {
             useUnifiedTopology: true,
@@ -29,7 +31,7 @@ mongoose.connect(dataBaseURL, {
         })
         .then(() => {
             console.log('Connected to mongoDB');
-            app.listen(3000, () => console.log('server started'));
+            app.listen(port, () => console.log('server started'));
             setInterval(() => mainCycle(), 30000)
             
         });
@@ -75,23 +77,25 @@ async function updateData() {
     for (let k = 0; k < arr2.length; k++) {
       let currentCard = result.find(item => item.idDella === arr2[k]);
       
-      if (currentCard !== undefined) {
-        let res = await card.updateOne({ idDella: currentCard.idDella }, { currentCard })
-        if (res.acknowledged !== false) {
+      if (currentCard !== undefined) { // карта є на Деллі
+        // перевіряємо чи є зміни
+        
+
+
+
+        let response1 = await card.updateOne({ idDella: currentCard.idDella }, currentCard )
+        //console.log(response1)
+        /* if (response1.acknowledged !== false) {
           console.log('updated: ' + currentCard)
-        }
+        }  */
        
-      } else {
-        await card.deleteOne({ idDella: arr2[k].idDella })
-        console.log('Карту видале з БД так як її нема на Делл ' + arr2[k].idDella)
+      } else { //карти нема на Деллі
+        await card.deleteOne({ idDella: arr2[k] })
+        console.log('Карту видале з БД так як її нема на Делл ' + arr2[k])
       }
 
 
 
-      /* if (result.find(el => el.idDella === arr2[k]) === undefined) {
-        await card.deleteOne({ idDella: arr2[k]})
-        console.log('Карту видале з БД так як її нема на Делл ' + arr2[k])
-      } */
       
     }
   }
@@ -110,3 +114,9 @@ async function check() {
   let data = await getPageContent(url, id)
   console.log(data)
 }
+
+async function foo() {
+  let data = await card.updateOne({ idDella: '21347184034508797'}, { contentName: '123'})
+  //console.log(data)
+}
+foo()
