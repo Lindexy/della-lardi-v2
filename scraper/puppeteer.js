@@ -4,7 +4,7 @@ const fs = require('fs').promises;
 const LAUNCH_PUPPETEER_OPTS = {
   headless: true,
   defaultViewport: null,
-  args: ["--window-size=1920x1080"]
+  args: ['--no-sandbox']
 };
 
 // Використувується для :
@@ -214,7 +214,7 @@ async function getPageContent(url, ids) {
       // Доп. умови оплати
   
       if (targetCard.querySelector('.price_tags') !==null) {
-          fraht.payment = targetCard.querySelector('.price_tags').textContent.replace(/\n/g, '');
+          fraht.payment = targetCard.querySelector('.price_tags').textContent.replace(/\n/g, ' ');
       }
       
       // Вага
