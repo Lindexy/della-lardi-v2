@@ -13,7 +13,7 @@ const LAUNCH_PUPPETEER_OPTS = {
 async function getPageContent(url, ids) {
   const browser = await puppeteer.launch(LAUNCH_PUPPETEER_OPTS);
   const page = await browser.newPage();
-  page.setDefaultNavigationTimeout(45000);
+  await page.setDefaultNavigationTimeout(45000);
   
   const cookiesString = await fs.readFile('./scraper/cookie/cookies.json');
   const cookies = JSON.parse(cookiesString);
