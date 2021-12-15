@@ -32,7 +32,7 @@ mongoose.connect(dataBaseURL, {
         .then(() => {
             console.log('Connected to mongoDB');
             app.listen(port, () => console.log('server started'));
-            setInterval(() => mainCycle(), 30000)
+            setInterval(() => mainCycle(), 180000)
             
         });
 
