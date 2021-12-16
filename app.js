@@ -78,7 +78,7 @@ async function updateData() {
         }
       } else { //карти нема на Деллі
         await card.updateOne({ idDella: arr2[k] }, { deleted: true })
-        console.log('Карту видале з БД так як її нема на Делл ' + arr2[k])
+        console.log('Deleted, mark as closed ' + arr2[k])
       }
     }
   }

@@ -12,6 +12,9 @@ exports.updateCard = async function (req, res) {
     let data = await card.updateOne({ _id: postData._id }, postData );
     res.status(200).json(data)
 }
+exports.deleteClosedCards = async function (req, res) {
+    await card.deleteMany({ closed: true })
+}
 
 exports.hello = function (req, res) {
     res.send("Вы попали в API");

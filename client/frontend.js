@@ -33,9 +33,9 @@ const App = {
         async updateAllCardsV2() {
             this.cards = await request('api/cards');
         },
-        async deleteAllCards() {
-            let test = JSON.stringify(this.cards[0])
-            console.log(test)
+        async deleteClosedCards() {
+            let response = await request('api/cards/delete');
+            console.log(response);
         },
         parseWaypoint(arr) {
             let result = ''

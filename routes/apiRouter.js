@@ -3,7 +3,7 @@ const apiController = require('../controllers/apiController')
 const apiRouter = express.Router();
 
 
-
+apiRouter.get('/cards/delete', apiController.deleteClosedCards)
 apiRouter.post('/cards/update', apiController.updateCard);
 apiRouter.get('/cards', apiController.showCards);
 
