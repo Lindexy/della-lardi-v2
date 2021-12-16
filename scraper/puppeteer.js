@@ -23,7 +23,6 @@ async function getPageContent(url, ids) {
     "value": ids.join('-'),
     "domain": ".della.com.ua",
     "path": "/",
-    //"expires": 1642082989.676829,
     "size": 28,
     "httpOnly": false,
     "secure": false,
