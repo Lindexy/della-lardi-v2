@@ -30,6 +30,44 @@ body {
 .filters input {
   width: 500px;
 }
+.toggle-switch {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.toggle-switch label {
+  position: relative;
+  display: block;
+  width: 80px;
+  height: 30px;
+  background: #ddd;
+  cursor: pointer;
+  border-radius: 15px;
+  transition: all 300ms ease-in-out;
+}
+.toggle-switch label::after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #eee;
+  top: 50%;
+  left: 0px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  box-shadow: inset 0px 0px 1px 1px #ddd;
+  transition: all 300ms ease-in-out;
+}
+.toggle-switch input:checked + label {
+  background: rgb(157, 213, 255);
+}
+.toggle-switch input:checked + label::after {
+  background: rgb(34, 151, 255);
+  left: calc(80px - 40px);
+}
+.toggle-switch input {
+  display: none;
+}
 .main {
   width: 100%;
   padding-top: 30px;

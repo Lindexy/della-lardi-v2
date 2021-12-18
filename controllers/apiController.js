@@ -8,12 +8,13 @@ exports.showCards = async function (req, res) {
 }
 exports.updateCard = async function (req, res) {
     console.log('Получив запрос на зміну карти');
-    let postData = req.body
+    let postData = req.body;
+    postData.needToUpdate = true;
     let data = await card.updateOne({ _id: postData._id }, postData );
     res.status(200).json(data)
 }
 exports.deleteClosedCards = async function (req, res) {
-    await card.deleteMany({ closed: true })
+    await card.deleteMany({ closed: true, needToUpdate: false })
 }
 
 exports.hello = function (req, res) {

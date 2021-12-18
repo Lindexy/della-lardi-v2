@@ -55,7 +55,8 @@ async function mainCycle(){
         })
     }
   }
-  updateData()
+  updateData();
+  //testPush();
 }
 // актуалізація данних
 // получаємо всі карти з БД
@@ -72,29 +73,38 @@ async function updateData() {
     for (let j = 0; j < arr.length; j++) {
       arr2.push(arr[j].idDella)
     }
-    url = 'https://della.com.ua/my/selected/';
-    let result = await getPageContent(url, arr2);
-    for (let k = 0; k < arr2.length; k++) {
-      let currentCard = result.find(item => item.idDella === arr2[k]);
+    
+    let result = await getPageContent('https://della.com.ua/my/selected/', arr2);
+    for (let k = 0; k < arr.length; k++) {
+      let currentCard = result.find(item => item.idDella === arr[k].idDella);
       if (currentCard !== undefined) { // карта є на Деллі
         let response1 = await card.updateOne({ idDella: currentCard.idDella }, currentCard )
-        if (response1.modifiedCount > 0) {
-          await card.updateOne({ idDella: arr2[k] }, { needToUpdate: true })
-          console.log('card updated: ' + arr2[k])
+        if (response1.modifiedCount > 0 && arr[k].published) {
+          await card.updateOne({ idDella: arr[k].idDella }, { needToUpdate: true })
+          console.log('card updated: ' + arr[k].idDella)
         }
       } else { //карти нема на Деллі
-        await card.updateOne({ idDella: arr2[k] }, { closed: true, needToUpdate: true });
+        await card.updateOne({ idDella: arr[k].idDella }, { closed: true, needToUpdate: true });
         
-        console.log('Deleted, mark as closed ' + arr2[k])
+        console.log('Deleted, mark as closed ' + arr[k].idDella)
       }
     }
   }
 }
-testPush()
+
 async function testPush() {
-  let data = await card.find({ agreedPub: true });
-  if (data[0]) {
-    addCargo(data[0], 'add');
+  let res = await card.find({ needToUpdate: true });
+  for (let i = 0; i < res.length; i++) {
+    
+    if (!res[i].published && res[i].agreedPub) {
+      //console.log(res[i].published)
+      addCargo(res[i], 'add')
+    }
+    if (res[i].published && res[i].agreedPub) {
+      addCargo(res[i], 'change')
+    }
+    
+    
   }
   
 }
@@ -197,11 +207,11 @@ async function addCargo(targetCard, type) {
 
   switch (type) {
     case 'add':
-      await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(data), { headers } )
-      .then(res => card.updateOne({ idDella: targetCard.idDella }, { idLardi: res.data.id }))
-      .catch(error => console.log(error.response.data))
-      //console.log(result.data.id)
-      //let resp = await card.updateOne({ idDella: targetCard.idDella }, { idLardi: result.data.id })
+      let result = await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(data), { headers } )
+      .then(result => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false, published: true }))
+      .catch(res => console.log(res.response.data))
+      
+      
       break;
     case 'change':
       axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published' + targetCard.idLardi)
