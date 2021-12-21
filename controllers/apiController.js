@@ -7,7 +7,6 @@ exports.showCards = async function (req, res) {
     res.status(200).json(data)
 }
 exports.updateCard = async function (req, res) {
-    console.log('Получив запрос на зміну карти');
     let postData = req.body;
     postData.needToUpdate = true;
     let data = await card.updateOne({ _id: postData._id }, postData );

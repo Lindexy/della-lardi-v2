@@ -2,7 +2,7 @@ let mongoose = require('mongoose');
 
 let cardSchema = mongoose.Schema({
   idDella: {type: String, required: true, unique: true},
-  idLardi: String,
+  idLardi: Number,
   url: String,
   dateFrom: String,
   dateTo: String,

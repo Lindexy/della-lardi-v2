@@ -56,7 +56,8 @@ async function mainCycle(){
     }
   }
   updateData();
-  //testPush();
+  testPush();
+  deleteClosedCards();
 }
 // актуалізація данних
 // получаємо всі карти з БД
@@ -84,7 +85,7 @@ async function updateData() {
           console.log('card updated: ' + arr[k].idDella)
         }
       } else { //карти нема на Деллі
-        await card.updateOne({ idDella: arr[k].idDella }, { closed: true, needToUpdate: true });
+        await card.updateOne({ idDella: arr[k].idDella }, { closed: true });
         
         console.log('Deleted, mark as closed ' + arr[k].idDella)
       }
@@ -102,12 +103,22 @@ async function testPush() {
     }
     if (res[i].published && res[i].agreedPub) {
       addCargo(res[i], 'change')
+    } 
+  }  
+}
+
+async function deleteClosedCards() {
+  let res = await card.find({ published: true }); //всі закриті і закинуті заявки
+  for (let i = 0; i < res.length; i++) {
+    if (res[i].closed || !res[i].agreedPub) {
+      addCargo(res[i], 'delete')
     }
     
     
   }
-  
 }
+
+
 
 async function addCargo(targetCard, type) {
   let data = {}
@@ -178,6 +189,7 @@ async function addCargo(targetCard, type) {
       'мікроавтобус': '57',
       'контейнер пустий': '27',
       'металовіз (ломовіз)': '69',
+      'щеповіз': '26',
     }
     switch (carType) {
       case 'будь-яка':
@@ -208,16 +220,18 @@ async function addCargo(targetCard, type) {
   switch (type) {
     case 'add':
       let result = await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(data), { headers } )
-      .then(result => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false, published: true }))
+      .then(result => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false, published: true, idLardi: result.data.id }))
       .catch(res => console.log(res.response.data))
-      
-      
       break;
     case 'change':
-      axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published' + targetCard.idLardi)
+      console.log('try to update card...');
+      axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published/' + targetCard.idLardi, JSON.stringify(data), { headers } )
+      .then(res => card.updateOne( { idDella: targetCard.idDella }, { needToUpdate: false }))
+      .catch(res => console.log(res.response.data))
       break;
     case 'delete':
-      axios.post('https://api.lardi-trans.com/v2/proposals/my/basket/throw', JSON.stringify({cargoIds: [targetCard.idLardi]}))
-      break;
+      axios.post('https://api.lardi-trans.com/v2/proposals/my/basket/throw', JSON.stringify({cargoIds: [targetCard.idLardi]}), { headers } )
+      .then(res => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false, published: false, idLardi: '' }))
+      .catch(res => console.log(res.response.data))
   }
 }
