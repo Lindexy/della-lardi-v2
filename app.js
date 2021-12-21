@@ -214,7 +214,7 @@ async function addCargo(targetCard, type) {
   let headers = {
     "Accept" : "application/json",
     "Content-Type" : "application/json",
-    "Authorization" : "2G30T38OTS7000002145" //Натаха 2KMC4KLY6L5000002157         2G30T38OTS7000002145
+    "Authorization" : "2KMC4KLY6L5000002157" //Натаха 2KMC4KLY6L5000002157         2G30T38OTS7000002145
   }
 
   switch (type) {
