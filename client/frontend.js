@@ -4,7 +4,8 @@ const App = {
             search: '',
             serverSettings: {},
             cards: [],
-            shownCards: [],
+            //shownCards: [],
+            showAddedCards: false,
         }
     },
     methods: {
@@ -23,9 +24,7 @@ const App = {
             for (let i = 0; i < data.length; i++) {
                 if (this.cards.some(item => item.idDella === data[i].idDella)) {
                 } else {
-                    
                     this.cards.push(data[i]);
-                    
                 }
             }
             console.log('updeted');
@@ -48,9 +47,12 @@ const App = {
     computed: {
         filteredCards() {
             let self = this
-            const filtered = this.cards.filter(function(card) {
+            let filtered = this.cards.filter(function(card) {
                 return JSON.stringify(card).toLowerCase().indexOf(self.search.toLowerCase()) > -1
             })
+            if (this.showAddedCards) {
+                filtered = filtered.filter(e => e.agreedPub)
+            }
             return filtered
         }
     },
