@@ -10,12 +10,11 @@ const apiRouter = require('./routes/apiRouter');
 const homeRouter = require('./routes/homeRouter');
 const card = require('./models/card');
 const serverSettings = require('./models/serverSettings');
-const res = require('express/lib/response');
 
 
 const app = express();
 // робимо папку 'client' статичною
-app.use(express.static(path.resolve(__dirname, 'client')));
+app.use(express.static(path.resolve(__dirname, 'dist')));
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -129,13 +128,13 @@ async function addCargo(targetCard, type) {
     data.contentName = targetCard.contentName;
     data.waypointListSource = targetCard.waypointListSource;
     data.waypointListTarget = targetCard.waypointListTarget;
-    if (targetCard.dateTo) { data.dateTo = targetCard.dateTo };
-    if (targetCard.sizeMassTo) { data.sizeMassTo = targetCard.sizeMassTo };
-    if (targetCard.sizeMassFrom) { data.sizeMassFrom = targetCard.sizeMassFrom };
-    if (targetCard.sizeVolumeTo) { data.sizeVolumeTo = targetCard.sizeVolumeTo };
-    if (targetCard.sizeVolumeFrom) { data.sizeVolumeFrom = targetCard.sizeVolumeFrom };
-    if (targetCard.paymentPrice) { data.paymentPrice = targetCard.paymentPrice };
-    if (targetCard.paymentCurrencyId) { data.paymentCurrencyId = targetCard.paymentCurrencyId };
+    if (targetCard.dateTo) { data.dateTo = targetCard.dateTo }
+    if (targetCard.sizeMassTo) { data.sizeMassTo = targetCard.sizeMassTo }
+    if (targetCard.sizeMassFrom) { data.sizeMassFrom = targetCard.sizeMassFrom }
+    if (targetCard.sizeVolumeTo) { data.sizeVolumeTo = targetCard.sizeVolumeTo }
+    if (targetCard.sizeVolumeFrom) { data.sizeVolumeFrom = targetCard.sizeVolumeFrom }
+    if (targetCard.paymentPrice) { data.paymentPrice = targetCard.paymentPrice }
+    if (targetCard.paymentCurrencyId) { data.paymentCurrencyId = targetCard.paymentCurrencyId }
 
     if (targetCard.note) { data.note = targetCard.note.substring(0,40);}
 

@@ -4,7 +4,7 @@ const App = {
             search: '',
             serverSettings: {},
             cards: [],
-            //shownCards: [],
+            shownCards: [],
             showAddedCards: false,
         }
     },
@@ -16,6 +16,7 @@ const App = {
             let response = await request('api/settings', 'POST', this.serverSettings)
         },
         async updateCard(i) {
+            
             this.cards[i].agreedPub = !this.cards[i].agreedPub;
             let response = await request('api/cards/update', 'POST', this.cards[i])
         },
