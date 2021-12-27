@@ -26,11 +26,13 @@ export default {
     .v-left-menu {
         width: 256px;
         min-height: 300px;
+        flex-shrink: 0;
         border-right: solid 1px rgb(226, 226, 226);
     }
     .v-left-menu div {
         padding: 11px 30px;
         border-radius: 0 20px 20px 0;
+        cursor: pointer;
       
     }
     .v-left-menu div:hover {

@@ -1,8 +1,6 @@
 <template>
     <div class="v-catalog">
-        <div class="v-catalog_test-filters">
-            
-        </div>
+        <v-filters/>
         <div class="v-catalog_cards">
             <v-catalog-item
             v-for="card in cards"
@@ -15,10 +13,12 @@
 </template>
 <script>
 import VCatalogItem from './v-catalog-item.vue'
+import VFilters from './v-filters.vue'
 export default {
     name: 'v-catalog',
     components: {
-        VCatalogItem
+        VCatalogItem,
+        VFilters,
 
     },
     data() {
@@ -43,9 +43,5 @@ export default {
 }
 .v-catalog_cards {
     display: flex;
-}
-.v-catalog_test-filters {
-    height: 46px;
-    border-bottom: solid 1px rgb(226, 226, 226);
 }
 </style>
