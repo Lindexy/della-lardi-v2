@@ -1,6 +1,7 @@
+require('dotenv').config();
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const axios = require('axios');
-const path = require('path');
 const mongoose = require('mongoose');
 const dataBaseURL = require('./config');
 const getPageContent = require('./scraper/puppeteer');
@@ -10,38 +11,44 @@ const apiRouter = require('./routes/apiRouter');
 const homeRouter = require('./routes/homeRouter');
 const card = require('./models/card');
 const serverSettings = require('./models/serverSettings');
+const authRouter = require('./routes/authRouter');
 
 
 const app = express();
+
+app.use(cookieParser())
 // робимо папку 'client' статичною
-app.use(express.static(path.resolve(__dirname, 'dist')));
+app.use(express.static(__dirname + '/client/dist'));
 
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+
+app.use(express.urlencoded({ extended: true }))
+
 
 app.use('/', homeRouter)
 app.use('/api', apiRouter)
+app.use('/auth', authRouter)
 
 const port = process.env.PORT || 3000;
 
 
-mongoose.connect(dataBaseURL, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true,
-            autoIndex: true,
-        })
-        .then(() => {
-            console.log('Connected to mongoDB');
-            app.listen(port, () => console.log('server started'));
-            mainCycle();
-            setInterval(() => mainCycle(), 60000);
-        });
+mongoose.connect(process.env.DB_URL, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  autoIndex: true,
+})
+  .then(() => {
+    console.log('Connected to mongoDB');
+    app.listen(port, () => console.log(`server started on PORT:${port}`));
+    mainCycle();
+    setInterval(() => mainCycle(), 60000);
+  });
 
 
 let SITE = 'https://della.com.ua/search';
 let ids = ['9221312153642559334'];
 
-async function mainCycle(){
+async function mainCycle() {
   let setup = await serverSettings.find({ _id: '61a9e5936978c794bb685d4b' });
   //await card.deleteMany({})
   if (setup[0].scraping === true) {
@@ -50,13 +57,13 @@ async function mainCycle(){
     for (let i = 0; i < data.length; i++) {
       let test = new card(data[i])
       test.save((err, info) => {
-          //if (err) { console.log('err') }
-        })
+        //if (err) { console.log('err') }
+      })
     }
   }
-  updateData();
-  testPush();
-  deleteClosedCards();
+  //updateData();
+  //testPush();
+  //deleteClosedCards();
 }
 // актуалізація данних
 // получаємо всі карти з БД
@@ -66,26 +73,26 @@ async function mainCycle(){
 
 async function updateData() {
   console.log('updating...')
-  let data = await card.find({closed: false});
+  let data = await card.find({ closed: false });
   for (let i = 0; i < data.length / 200; i++) {
-    let arr =  data.slice(i * 200, (i * 200) + 200);
+    let arr = data.slice(i * 200, (i * 200) + 200);
     let arr2 = [];
     for (let j = 0; j < arr.length; j++) {
       arr2.push(arr[j].idDella)
     }
-    
+
     let result = await getPageContent('https://della.com.ua/my/selected/', arr2);
     for (let k = 0; k < arr.length; k++) {
       let currentCard = result.find(item => item.idDella === arr[k].idDella);
       if (currentCard !== undefined) { // карта є на Деллі
-        let response1 = await card.updateOne({ idDella: currentCard.idDella }, currentCard )
+        let response1 = await card.updateOne({ idDella: currentCard.idDella }, currentCard)
         if (response1.modifiedCount > 0 && arr[k].published) {
           await card.updateOne({ idDella: arr[k].idDella }, { needToUpdate: true })
           console.log('card updated: ' + arr[k].idDella)
         }
       } else { //карти нема на Деллі
         await card.updateOne({ idDella: arr[k].idDella }, { closed: true });
-        
+
         console.log('Deleted, mark as closed ' + arr[k].idDella)
       }
     }
@@ -95,15 +102,15 @@ async function updateData() {
 async function testPush() {
   let res = await card.find({ needToUpdate: true });
   for (let i = 0; i < res.length; i++) {
-    
+
     if (!res[i].published && res[i].agreedPub) {
       //console.log(res[i].published)
       addCargo(res[i], 'add')
     }
     if (res[i].published && res[i].agreedPub) {
       addCargo(res[i], 'change')
-    } 
-  }  
+    }
+  }
 }
 
 async function deleteClosedCards() {
@@ -112,8 +119,8 @@ async function deleteClosedCards() {
     if (res[i].closed || !res[i].agreedPub) {
       addCargo(res[i], 'delete')
     }
-    
-    
+
+
   }
 }
 
@@ -136,7 +143,7 @@ async function addCargo(targetCard, type) {
     if (targetCard.paymentPrice) { data.paymentPrice = targetCard.paymentPrice }
     if (targetCard.paymentCurrencyId) { data.paymentCurrencyId = targetCard.paymentCurrencyId }
 
-    if (targetCard.note) { data.note = targetCard.note.substring(0,40);}
+    if (targetCard.note) { data.note = targetCard.note.substring(0, 40); }
 
     if (targetCard.loadTypes) {
       data.loadTypes = [];
@@ -166,10 +173,10 @@ async function addCargo(targetCard, type) {
         data.paymentTypeId = '2';
       } else if (targetCard.payment.includes('Софт')) {
         data.paymentTypeId = '10';
-      } 
+      }
     }
   }
-  function setCarType(carType, ) {
+  function setCarType(carType,) {
     let carTypes = {
       'тент': '34',
       'рефрижератор': '32',
@@ -209,28 +216,28 @@ async function addCargo(targetCard, type) {
         }
     }
   }
-  
+
   let headers = {
-    "Accept" : "application/json",
-    "Content-Type" : "application/json",
-    "Authorization" : "2G30T38OTS7000002145" //Натаха 2KMC4KLY6L5000002157         2G30T38OTS7000002145
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": "2G30T38OTS7000002145" //Натаха 2KMC4KLY6L5000002157         2G30T38OTS7000002145
   }
 
   switch (type) {
     case 'add':
-      let result = await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(data), { headers } )
-      .then(result => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false, published: true, idLardi: result.data.id }))
-      .catch(res => console.log(res.response.data))
+      let result = await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(data), { headers })
+        .then(result => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false, published: true, idLardi: result.data.id }))
+        .catch(res => console.log(res.response.data))
       break;
     case 'change':
       console.log('try to update card...');
-      axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published/' + targetCard.idLardi, JSON.stringify(data), { headers } )
-      .then(res => card.updateOne( { idDella: targetCard.idDella }, { needToUpdate: false }))
-      .catch(res => console.log(res.response.data))
+      axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published/' + targetCard.idLardi, JSON.stringify(data), { headers })
+        .then(res => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false }))
+        .catch(res => console.log(res.response.data))
       break;
     case 'delete':
-      axios.post('https://api.lardi-trans.com/v2/proposals/my/basket/throw', JSON.stringify({cargoIds: [targetCard.idLardi]}), { headers } )
-      .then(res => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false, published: false, idLardi: '' }))
-      .catch(res => console.log(res.response.data))
+      axios.post('https://api.lardi-trans.com/v2/proposals/my/basket/throw', JSON.stringify({ cargoIds: [targetCard.idLardi] }), { headers })
+        .then(res => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false, published: false, idLardi: '' }))
+        .catch(res => console.log(res.response.data))
   }
 }

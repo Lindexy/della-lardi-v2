@@ -1,7 +1,7 @@
 .DS_Store
 ToDo.txt
 node_modules
-/dist
+client/node_modules
 
 
 # local env files
