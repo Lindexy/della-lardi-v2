@@ -1,5 +1,5 @@
 const card = require('../models/card');
-const serverSettings = require ('../models/serverSettings');
+const serverSettings = require('../models/serverSettings');
 
 
 exports.showCards = async function (req, res) {
@@ -8,8 +8,9 @@ exports.showCards = async function (req, res) {
 }
 exports.updateCard = async function (req, res) {
     let postData = req.body;
+    console.log(postData.contentName);
     postData.needToUpdate = true;
-    let data = await card.updateOne({ _id: postData._id }, postData );
+    let data = await card.updateOne({ _id: postData._id }, postData);
     res.status(200).json(data)
 }
 exports.deleteClosedCards = async function (req, res) {
@@ -22,9 +23,9 @@ exports.hello = function (req, res) {
 
 exports.settingsSet = async function (req, res) {
     let postData = req.body
-    
-    let updated = await serverSettings.updateOne({ _id: postData._id}, postData);
-    
+
+    let updated = await serverSettings.updateOne({ _id: postData._id }, postData);
+
     res.send(postData)
 }
 

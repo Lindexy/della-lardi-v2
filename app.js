@@ -16,18 +16,15 @@ const authRouter = require('./routes/authRouter');
 
 const app = express();
 
-app.use(cookieParser())
-// робимо папку 'client' статичною
+app.use(cookieParser());
 app.use(express.static(__dirname + '/client'));
-
-app.use(express.json())
-
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
-app.use('/', homeRouter)
-app.use('/api', apiRouter)
-app.use('/auth', authRouter)
+app.use('/', homeRouter);
+app.use('/api', apiRouter);
+app.use('/auth', authRouter);
 
 const port = process.env.PORT || 3000;
 
@@ -50,7 +47,7 @@ let ids = ['9221312153642559334'];
 
 async function mainCycle() {
   let setup = await serverSettings.find({ _id: '61a9e5936978c794bb685d4b' });
-  await card.deleteMany({})
+  //await card.deleteMany({}) // Костиль для видалення всіх заявок
   if (setup[0].scraping === true) {
     console.log('scraping on');
     let data = await getPageContent(SITE, ids)// url, arr

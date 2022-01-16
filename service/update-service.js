@@ -6,7 +6,6 @@ async function updateData() {
     let data = await card.find({ closed: false });
 
     for (let i = 0; i < data.length / 200; i++) {
-        console.log(i)
         let arr = data.slice(i * 200, (i * 200) + 200);
         let arr2 = [];
         for (let j = 0; j < arr.length; j++) {

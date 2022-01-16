@@ -4,7 +4,6 @@ const App = {
             search: '',
             serverSettings: {},
             cards: [],
-            //shownCards: [],
             showAddedCards: false,
         }
     },
@@ -13,11 +12,16 @@ const App = {
             this.serverSettings = await request('api/settings')
         },
         async serverSettingsUpdate() {
-            let response = await request('api/settings', 'POST', this.serverSettings)
+            await request('api/settings', 'POST', this.serverSettings)
         },
         async updateCard(i) {
-            this.cards[i].agreedPub = !this.cards[i].agreedPub;
-            let response = await request('api/cards/update', 'POST', this.cards[i])
+            for (let item of this.cards) {
+                if (item._id == this.filteredCards[i]._id) {
+                    item.agreedPub = !item.agreedPub;
+                    await request('api/cards/update', 'POST', item);
+                    break;
+                }
+            }
         },
         async updateAllCards() {
             let data = await request('api/cards');
