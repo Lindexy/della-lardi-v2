@@ -3,8 +3,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const axios = require('axios');
 const mongoose = require('mongoose');
-const dataBaseURL = require('./config');
-const getPageContent = require('./scraper/puppeteer');
+const getPageContent = require('./service/scraper/puppeteer');
+const updateData = require('./service/update-service')
 
 
 const apiRouter = require('./routes/apiRouter');
@@ -18,7 +18,7 @@ const app = express();
 
 app.use(cookieParser())
 // робимо папку 'client' статичною
-app.use(express.static(__dirname + '/client/dist'));
+app.use(express.static(__dirname + '/client'));
 
 app.use(express.json())
 
@@ -50,7 +50,7 @@ let ids = ['9221312153642559334'];
 
 async function mainCycle() {
   let setup = await serverSettings.find({ _id: '61a9e5936978c794bb685d4b' });
-  //await card.deleteMany({})
+  await card.deleteMany({})
   if (setup[0].scraping === true) {
     console.log('scraping on');
     let data = await getPageContent(SITE, ids)// url, arr
@@ -61,42 +61,9 @@ async function mainCycle() {
       })
     }
   }
-  //updateData();
+  updateData();
   //testPush();
   //deleteClosedCards();
-}
-// актуалізація данних
-// получаємо всі карти з БД
-// відправляємо на перевірку по 200 штук
-// після того як перевірили всі чекаємо мінуту, поченаємо заново
-
-
-async function updateData() {
-  console.log('updating...')
-  let data = await card.find({ closed: false });
-  for (let i = 0; i < data.length / 200; i++) {
-    let arr = data.slice(i * 200, (i * 200) + 200);
-    let arr2 = [];
-    for (let j = 0; j < arr.length; j++) {
-      arr2.push(arr[j].idDella)
-    }
-
-    let result = await getPageContent('https://della.com.ua/my/selected/', arr2);
-    for (let k = 0; k < arr.length; k++) {
-      let currentCard = result.find(item => item.idDella === arr[k].idDella);
-      if (currentCard !== undefined) { // карта є на Деллі
-        let response1 = await card.updateOne({ idDella: currentCard.idDella }, currentCard)
-        if (response1.modifiedCount > 0 && arr[k].published) {
-          await card.updateOne({ idDella: arr[k].idDella }, { needToUpdate: true })
-          console.log('card updated: ' + arr[k].idDella)
-        }
-      } else { //карти нема на Деллі
-        await card.updateOne({ idDella: arr[k].idDella }, { closed: true });
-
-        console.log('Deleted, mark as closed ' + arr[k].idDella)
-      }
-    }
-  }
 }
 
 async function testPush() {
