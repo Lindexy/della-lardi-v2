@@ -59,8 +59,8 @@ async function mainCycle() {
     }
   }
   updateData();
-  //testPush();
-  //deleteClosedCards();
+  testPush();
+  deleteClosedCards();
 }
 
 async function testPush() {

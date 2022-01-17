@@ -5,6 +5,12 @@ const App = {
             serverSettings: {},
             cards: [],
             showAddedCards: false,
+            filters: {
+                PDV: false,
+                BG: false,
+                minPrice: 0,
+
+            }
         }
     },
     methods: {
@@ -56,7 +62,17 @@ const App = {
             })
             if (this.showAddedCards) {
                 filtered = filtered.filter(e => e.agreedPub)
+            } else {
+                if (!this.filters.PDV) {
+                    filtered = filtered.filter(e => !e.payment.includes('ПДВ'))
+                }
+                if (!this.filters.BG) {
+                    filtered = filtered.filter(e => !e.payment.includes('Б/г'))
+                }
+                filtered = filtered.filter(e => +e.paymentPrice > this.filters.minPrice)
             }
+
+
             return filtered
         }
     },

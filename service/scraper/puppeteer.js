@@ -63,7 +63,7 @@ async function getPageContent(url, ids) {
 
             fraht.idDella = targetCard.getAttribute('data-request_id');
 
-            fraht.url = 'https://della.com.ua' + targetCard.querySelector('.request_distance').getAttribute('href')
+            fraht.url = 'https://della.com.ua' + targetCard.querySelector('.request_distance').getAttribute('href');
 
             // Дата
             let dateFrom1 = targetCard.querySelector('.date_add').innerHTML.substring(4, 6);

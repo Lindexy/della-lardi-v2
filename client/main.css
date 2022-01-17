@@ -20,6 +20,7 @@ body {
   display: flex;
 }
 .filters {
+  display: flex;
   padding: 5px;
   border-radius: 5px;
   font-size: 30px;
@@ -27,7 +28,7 @@ body {
   margin-top: 10px;
   background-color: rgb(219, 219, 219);
 }
-.filters input {
+.search input {
   width: 500px;
 }
 .toggle-switch {

@@ -31,20 +31,27 @@
                     <label for="senderOff">Off</label>
                 </div>
                 <div class="nav_counter">
-                    {{ cards.length }}
+                    {{ filteredCards.length }}/{{ cards.length }}
                 </div>
             </div>
             <div class="filters">
                 <button id="qqww" v-on:click="deleteClosedCards">Видалити закриті</button>
-                <input type="checkbox" v-model="showAddedCards">
-
-                Filters
-
                 <div class="filters_show-agreed">
+                    <label for="showAddedCards">Всі додані</label>
+                    <input id="showAddedCards" type="checkbox" v-model="showAddedCards">
+                </div>
+                <div class="filters_payment">
+                    <label for="PDV">ПДВ</label>
+                    <input type="checkbox" id="PDV" v-model="filters.PDV">
+                    <label for="BG">Б/г</label>
+                    <input type="checkbox" id="BG" v-model="filters.BG">
+
+                    <label for="minPrice">Мінімальна ціна</label>
+                    <input type="text" id="minPrice" v-model='filters.minPrice'>
 
                 </div>
                 <div class="search">
-                    <input type="text" v-model='search'>
+                    <input type="text" v-model='search' placeholder="Пошук">
                 </div>
             </div>
             <div class="main">
