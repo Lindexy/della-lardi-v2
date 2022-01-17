@@ -8,7 +8,6 @@ exports.showCards = async function (req, res) {
 }
 exports.updateCard = async function (req, res) {
     let postData = req.body;
-    console.log(postData.contentName);
     postData.needToUpdate = true;
     let data = await card.updateOne({ _id: postData._id }, postData);
     res.status(200).json(data)
