@@ -37,7 +37,12 @@ mongoose.connect(process.env.DB_URL, {
   .then(() => {
     console.log('Connected to mongoDB');
     app.listen(port, () => console.log(`server started on PORT:${port}`));
-    mainCycle();
+    try {
+      mainCycle();
+    } catch (error) {
+      console.log(error)
+    }
+
     setInterval(() => mainCycle(), 60000);
   });
 
@@ -58,12 +63,7 @@ async function mainCycle() {
       })
     }
   }
-  try {
-    updateData();
-  } catch (error) {
-    console.log(error)
-  }
-
+  updateData();
   testPush();
   deleteClosedCards();
 }
