@@ -99,7 +99,7 @@ async function addCargo(targetCard, type) {
     data.contentName = targetCard.contentName;
     data.waypointListSource = targetCard.waypointListSource;
     data.waypointListTarget = targetCard.waypointListTarget;
-    if (targetCard.dateTo) { data.dateTo = targetCard.dateTo }
+    if (targetCard.dateTo) { data.dateTo = targetCard.dateTo } else { data.dateTo = targetCard.dateFrom }
     if (targetCard.sizeMassTo) { data.sizeMassTo = targetCard.sizeMassTo }
     if (targetCard.sizeMassFrom) { data.sizeMassFrom = targetCard.sizeMassFrom }
     if (targetCard.sizeVolumeTo) { data.sizeVolumeTo = targetCard.sizeVolumeTo }
@@ -160,6 +160,7 @@ async function addCargo(targetCard, type) {
       'контейнер пустий': '27',
       'металовіз (ломовіз)': '69',
       'щеповіз': '26',
+      'скловіз': '58'
     }
     switch (carType) {
       case 'будь-яка':
