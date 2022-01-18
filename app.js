@@ -58,7 +58,12 @@ async function mainCycle() {
       })
     }
   }
-  updateData();
+  try {
+    updateData();
+  } catch (error) {
+    console.log(error)
+  }
+
   testPush();
   deleteClosedCards();
 }
