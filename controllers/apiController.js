@@ -13,7 +13,7 @@ exports.updateCard = async function (req, res) {
     res.status(200).json(data)
 }
 exports.deleteClosedCards = async function (req, res) {
-    await card.deleteMany({ closed: true, needToUpdate: false })
+    await card.deleteMany({ closed: true, published: false })
 }
 
 exports.hello = function (req, res) {

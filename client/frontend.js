@@ -2,14 +2,14 @@ const App = {
     data() {
         return {
             search: '',
+            exclusion: '',
             serverSettings: {},
             cards: [],
             showAddedCards: false,
             filters: {
                 PDV: false,
                 BG: false,
-                minPrice: 0,
-
+                minPrice: 0
             }
         }
     },
@@ -68,6 +68,12 @@ const App = {
                 }
                 if (!this.filters.BG) {
                     filtered = filtered.filter(e => !e.payment.includes('Б/г'))
+                }
+                if (this.exclusion) {
+                    let arr = this.exclusion.split(', ')
+                    for (let i = 0; i < arr.length; i++) {
+                        filtered = filtered.filter(e => !e.contentName.includes(arr[i]))
+                    }
                 }
                 filtered = filtered.filter(e => +e.paymentPrice > this.filters.minPrice)
             }

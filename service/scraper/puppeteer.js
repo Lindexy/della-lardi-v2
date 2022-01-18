@@ -48,11 +48,9 @@ async function getPageContent(url, ids) {
                     allCards.item(i).parentNode.remove();
                 } else {
                     let card = extract(allCards.item(i));
-
                     data.push(card);
                 }
             }
-            console.log(data);
             function extract(targetCard) {
                 let fraht = {};
 
@@ -65,6 +63,22 @@ async function getPageContent(url, ids) {
                 fraht.idDella = targetCard.getAttribute('data-request_id');
 
                 fraht.url = 'https://della.com.ua' + targetCard.querySelector('.request_distance').getAttribute('href');
+
+                if (targetCard.querySelector('.distance')) {
+                    fraht.distance = targetCard.querySelector('.distance').innerHTML;
+                }
+
+                let updated = targetCard.querySelector('.time_string').textContent;
+                if (updated.includes('день') || updated.includes('дні') || updated.includes('тижд')) {
+                    fraht.closed = true;
+                } else if (updated.includes('годин')) {
+                    let updatedAgo = parseInt(updated.replace(/[^\d]/g, ''))
+                    if (updatedAgo > 8) {
+                        fraht.closed = true;
+                    }
+                }
+
+
 
                 // Дата
                 let dateFrom1 = targetCard.querySelector('.date_add').innerHTML.substring(4, 6);

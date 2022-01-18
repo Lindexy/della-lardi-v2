@@ -24,50 +24,25 @@ body {
   padding: 5px;
   border-radius: 5px;
   font-size: 30px;
-  text-align: center;
+  /* text-align: center; */
   margin-top: 10px;
   background-color: rgb(219, 219, 219);
 }
+.filters div {
+  margin: 3px;
+  padding: 3px;
+  border-radius: 3px;
+  font-size: 14px;
+  border: rgb(194, 194, 194) 2px solid;
+}
+.filters_show-agreed {
+  width: 130px;
+}
+.filters_payment {
+  width: 200px;
+}
 .search input {
   width: 500px;
-}
-.toggle-switch {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.toggle-switch label {
-  position: relative;
-  display: block;
-  width: 80px;
-  height: 30px;
-  background: #ddd;
-  cursor: pointer;
-  border-radius: 15px;
-  transition: all 300ms ease-in-out;
-}
-.toggle-switch label::after {
-  content: "";
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  background: #eee;
-  top: 50%;
-  left: 0px;
-  transform: translateY(-50%);
-  border-radius: 50%;
-  box-shadow: inset 0px 0px 1px 1px #ddd;
-  transition: all 300ms ease-in-out;
-}
-.toggle-switch input:checked + label {
-  background: rgb(157, 213, 255);
-}
-.toggle-switch input:checked + label::after {
-  background: rgb(34, 151, 255);
-  left: calc(80px - 40px);
-}
-.toggle-switch input {
-  display: none;
 }
 .main {
   width: 100%;
@@ -104,8 +79,8 @@ body {
   font-weight: 500;
   font-size: 24px;
 }
-.card_updated {
-  width: 130px;
+.card_distance {
+  width: 200px;
 }
 .card_main {
   min-height: 100px;
@@ -127,7 +102,7 @@ body {
   font-size: 20px;
 }
 .card_cargo {
-  width: 500px;
+  width: 300px;
 }
 .card_footer {
   height: 40px;
@@ -158,7 +133,7 @@ body {
 
 .radio {
   height: 40px;
-  width: 120px;
+  width: 100px;
   margin: 3px;
   padding: 3px;
   border-radius: 3px;
@@ -204,4 +179,7 @@ body {
   position: fixed;
   left: 20px;
   bottom: 20px;
+}
+#minPrice {
+  width: 50px;
 }

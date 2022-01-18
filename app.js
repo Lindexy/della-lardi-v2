@@ -37,12 +37,7 @@ mongoose.connect(process.env.DB_URL, {
   .then(() => {
     console.log('Connected to mongoDB');
     app.listen(port, () => console.log(`server started on PORT:${port}`));
-    try {
-      mainCycle();
-    } catch (error) {
-      console.log(error)
-    }
-
+    mainCycle();
     setInterval(() => mainCycle(), 60000);
   });
 
@@ -109,7 +104,8 @@ async function addCargo(targetCard, type) {
     data.contentName = targetCard.contentName;
     data.waypointListSource = targetCard.waypointListSource;
     data.waypointListTarget = targetCard.waypointListTarget;
-    if (targetCard.dateTo) { data.dateTo = targetCard.dateTo } else { data.dateTo = targetCard.dateFrom }
+    if (targetCard.dateTo) { data.dateTo = targetCard.dateTo }
+    else { data.dateTo = targetCard.dateFrom }
     if (targetCard.sizeMassTo) { data.sizeMassTo = targetCard.sizeMassTo }
     if (targetCard.sizeMassFrom) { data.sizeMassFrom = targetCard.sizeMassFrom }
     if (targetCard.sizeVolumeTo) { data.sizeVolumeTo = targetCard.sizeVolumeTo }

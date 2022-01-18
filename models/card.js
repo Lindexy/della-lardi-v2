@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 
 let cardSchema = mongoose.Schema({
-  idDella: {type: String, required: true, unique: true},
+  idDella: { type: String, required: true, unique: true },
   idLardi: Number,
   url: String,
   dateFrom: String,
@@ -20,6 +20,7 @@ let cardSchema = mongoose.Schema({
   payment: String,
   sizeMassFrom: String,
   sizeMassTo: String,
+  distance: String,
   waypointListSource: [],
   waypointListTarget: [],
   agreedPub: {
@@ -46,7 +47,7 @@ let cardSchema = mongoose.Schema({
     type: Date,
     default: Date.now
   }
-  
+
   //dellaInfo: mongoose.Schema.Types.Mixed,
 })
 
