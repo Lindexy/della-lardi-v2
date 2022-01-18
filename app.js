@@ -51,21 +51,26 @@ let SITE = 'https://della.com.ua/search';
 let ids = ['9221312153642559334'];
 
 async function mainCycle() {
-  let setup = await serverSettings.find({ _id: '61a9e5936978c794bb685d4b' });
-  //await card.deleteMany({}) // Костиль для видалення всіх заявок
-  if (setup[0].scraping === true) {
-    console.log('scraping on');
-    let data = await getPageContent(SITE, ids)// url, arr
-    for (let i = 0; i < data.length; i++) {
-      let test = new card(data[i])
-      test.save((err, info) => {
-        //if (err) { console.log('err') }
-      })
+  try {
+    let setup = await serverSettings.find({ _id: '61a9e5936978c794bb685d4b' });
+    //await card.deleteMany({}) // Костиль для видалення всіх заявок
+    if (setup[0].scraping === true) {
+      console.log('scraping on');
+      let data = await getPageContent(SITE, ids)// url, arr
+      for (let i = 0; i < data.length; i++) {
+        let test = new card(data[i])
+        test.save((err, info) => {
+          //if (err) { console.log('err') }
+        })
+      }
     }
+    updateData();
+    testPush();
+    deleteClosedCards();
+  } catch (error) {
+    console.log(error)
   }
-  updateData();
-  testPush();
-  deleteClosedCards();
+
 }
 
 async function testPush() {
