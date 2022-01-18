@@ -191,17 +191,17 @@ async function addCargo(targetCard, type) {
     case 'add':
       await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(data), { headers })
         .then(result => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false, published: true, idLardi: result.data.id }))
-        .catch(res => console.log(res.response.data + data))
+        .catch(res => console.log(res.response.data, data))
       break;
     case 'change':
       console.log('try to update card...');
       await axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published/' + targetCard.idLardi, JSON.stringify(data), { headers })
         .then(res => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false }))
-        .catch(res => console.log(res.response.data + data))
+        .catch(res => console.log(res.response.data, data))
       break;
     case 'delete':
       await axios.post('https://api.lardi-trans.com/v2/proposals/my/basket/throw', JSON.stringify({ cargoIds: [targetCard.idLardi] }), { headers })
         .then(res => card.updateOne({ idDella: targetCard.idDella }, { needToUpdate: false, published: false, idLardi: '' }))
-        .catch(res => console.log(res.response.data + targetCard.idLardi))
+        .catch(res => console.log(res.response.data, targetCard.idLardi))
   }
 }
