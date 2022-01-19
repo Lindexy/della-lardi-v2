@@ -1,34 +1,46 @@
 const card = require('../models/card');
+const lardiRequest = require('./lardi-service');
 const getPageContent = require('./scraper/puppeteer');
 
 async function updateData() {
-    console.log('updating...')
-    let data = await card.find({ closed: false });
+    // Всі не закриті заявки відправляємо на перевірку актуальності
+    let cardsToCheck = await card.find({ closed: false });
+    for (let i = 0; i < cardsToCheck.length / 200; i++) {
+        // Ділимо на куски по 200 (обмеження Делли)
+        let bunch = cardsToCheck.slice(i * 200, (i * 200) + 200);
+        let ids = bunch.map(item => item.idDella)
 
-    for (let i = 0; i < data.length / 200; i++) {
-        let arr = data.slice(i * 200, (i * 200) + 200);
-        let arr2 = [];
-        for (let j = 0; j < arr.length; j++) {
-            arr2.push(arr[j].idDella)
-        }
+        // Получаємо інфу з Делли
+        let result = await getPageContent('https://della.com.ua/my/selected/', ids);
 
-        let result = await getPageContent('https://della.com.ua/my/selected/', arr2);
-        for (let k = 0; k < arr.length; k++) {
-            let currentCard = result.find(item => item.idDella === arr[k].idDella);
-            if (currentCard !== undefined) { // карта є на Деллі
-                let response1 = await card.updateOne({ idDella: currentCard.idDella }, currentCard)
-                if (response1.modifiedCount > 0 && arr[k].published) {
-                    await card.updateOne({ idDella: arr[k].idDella }, { needToUpdate: true })
-                    console.log('card updated: ' + arr[k].idDella)
+        bunch.forEach(async bunchItem => {
+            const currentCard = result.find(item => item.idDella === bunchItem.idDella);
+            if (currentCard) {
+                // заявка є, пробуємо її обновити в БД
+                const res = await card.updateOne({ idDella: currentCard.idDella }, currentCard);
+                // якщо є зміни, і заявка опублікована вказуємо що треба обновити
+                if (res.modifiedCount > 0 && bunchItem.published) {
+                    await card.updateOne({ idDella: bunchItem.idDella }, { needToUpdate: true })
+                    console.log('card updated: ' + bunchItem.idDella)
                 }
-            } else { //карти нема на Деллі
-                await card.updateOne({ idDella: arr[k].idDella }, { closed: true });
-
-                console.log('Deleted, mark as closed ' + arr[k].idDella)
+            } else { // заявки нема на Деллі, позначаємо в БД як закриту
+                await card.updateOne({ idDella: bunchItem.idDella }, { closed: true });
+                console.log('Deleted, mark as closed ' + bunchItem.idDella)
             }
-        }
+        })
     }
-    console.log('updaiting end!')
+
+    // Видаляємо всі опубліковані і закриті заявки
+    let cardsToDelete = await card.find({ published: true, closed: true });
+    cardsToDelete.forEach((item) => { lardiRequest(item, 'delete') });
+
+    // Відправляємо заявки на Ларді
+    let cardsToPublish = await card.find({ needToUpdate: true, agreedPub: true, published: false });
+    cardsToPublish.forEach((item) => { lardiRequest(item, 'add') })
+
+    // Оновлюємо заявки
+    let cardsToUpdate = await card.find({ needToUpdate: true, agreedPub: true, published: true })
+    cardsToUpdate.forEach((item) => { lardiRequest(item, 'change') })
 }
 
 module.exports = updateData;
