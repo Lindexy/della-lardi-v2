@@ -3,6 +3,22 @@ const lardiRequest = require('./lardi-service');
 const getPageContent = require('./scraper/puppeteer');
 
 async function updateData() {
+    // Видаляємо всі опубліковані і закриті заявки
+    let cardsToDelete = await card.find({ published: true });
+    cardsToDelete.forEach((item) => {
+        if (item.closed || !item.agreedPub) {
+            lardiRequest(item, 'delete')
+        }
+    });
+
+    // Відправляємо заявки на Ларді
+    let cardsToPublish = await card.find({ needToUpdate: true, agreedPub: true, published: false });
+    cardsToPublish.forEach((item) => { lardiRequest(item, 'add') })
+
+    // Оновлюємо заявки
+    let cardsToUpdate = await card.find({ needToUpdate: true, agreedPub: true, published: true })
+    cardsToUpdate.forEach((item) => { lardiRequest(item, 'change') })
+
     // Всі не закриті заявки відправляємо на перевірку актуальності
     let cardsToCheck = await card.find({ closed: false });
     for (let i = 0; i < cardsToCheck.length / 200; i++) {
@@ -29,22 +45,6 @@ async function updateData() {
             }
         })
     }
-
-    // Видаляємо всі опубліковані і закриті заявки
-    let cardsToDelete = await card.find({ published: true });
-    cardsToDelete.forEach((item) => {
-        if (item.closed || !item.agreedPub) {
-            lardiRequest(item, 'delete')
-        }
-    });
-
-    // Відправляємо заявки на Ларді
-    let cardsToPublish = await card.find({ needToUpdate: true, agreedPub: true, published: false });
-    cardsToPublish.forEach((item) => { lardiRequest(item, 'add') })
-
-    // Оновлюємо заявки
-    let cardsToUpdate = await card.find({ needToUpdate: true, agreedPub: true, published: true })
-    cardsToUpdate.forEach((item) => { lardiRequest(item, 'change') })
 }
 
 module.exports = updateData;

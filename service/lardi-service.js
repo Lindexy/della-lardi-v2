@@ -2,7 +2,7 @@ const axios = require('axios');
 const card = require('../models/card');
 
 async function lardiRequest(currentCard, type) {
-    const preparedCard = prepareCard(currentCard);
+    const cardInfo = prepareCard(currentCard);
 
     let headers = {
         "Accept": "application/json",
@@ -12,15 +12,15 @@ async function lardiRequest(currentCard, type) {
 
     switch (type) {
         case 'add':
-            await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(preparedCard), { headers })
+            await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(cardInfo), { headers })
                 .then(result => card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false, published: true, idLardi: result.data.id }))
-                .catch(res => console.log(res.response.data, preparedCard))
+                .catch(res => console.log(res.response.data, cardInfo))
             break;
         case 'change':
             console.log('try to update card...');
-            await axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published/' + currentCard.idLardi, JSON.stringify(preparedCard), { headers })
+            await axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published/' + currentCard.idLardi, JSON.stringify(cardInfo), { headers })
                 .then(res => card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false }))
-                .catch(res => console.log(res.response.data, preparedCard))
+                .catch(res => console.log(res.response.data, cardInfo))
             break;
         case 'delete':
             await axios.post('https://api.lardi-trans.com/v2/proposals/my/basket/throw', JSON.stringify({ cargoIds: [currentCard.idLardi] }), { headers })
@@ -45,6 +45,9 @@ function prepareCard(currentCard) {
     if (currentCard.sizeVolumeFrom) { preparedCard.sizeVolumeFrom = currentCard.sizeVolumeFrom }
     if (currentCard.paymentPrice) { preparedCard.paymentPrice = currentCard.paymentPrice }
     if (currentCard.paymentCurrencyId) { preparedCard.paymentCurrencyId = currentCard.paymentCurrencyId }
+    if (currentCard.sizeLength) { preparedCard.sizeLength = currentCard.sizeLength }
+    if (currentCard.sizeWidth) { preparedCard.sizeWidth = currentCard.sizeWidth }
+    if (currentCard.sizeHeight) { preparedCard.sizeHeight = currentCard.sizeHeight }
 
     if (currentCard.note) { preparedCard.note = currentCard.note.substring(0, 40); }
 
