@@ -1,7 +1,8 @@
 const axios = require('axios');
+const card = require('../models/card');
 
 async function lardiRequest(currentCard, type) {
-    const preparedCard = preparepreparedCard(currentCard);
+    const preparedCard = prepareCard(currentCard);
 
     let headers = {
         "Accept": "application/json",
@@ -13,7 +14,7 @@ async function lardiRequest(currentCard, type) {
         case 'add':
             await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(preparedCard), { headers })
                 .then(result => card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false, published: true, idLardi: result.data.id }))
-                .catch(res => console.log(res.response, preparedCard))
+                .catch(res => console.log(res.response.data, preparedCard))
             break;
         case 'change':
             console.log('try to update card...');
@@ -23,12 +24,12 @@ async function lardiRequest(currentCard, type) {
             break;
         case 'delete':
             await axios.post('https://api.lardi-trans.com/v2/proposals/my/basket/throw', JSON.stringify({ cargoIds: [currentCard.idLardi] }), { headers })
-                .then(res => card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false, published: false, idLardi: '' }))
+                .then(res => card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false, agreedPub: false, published: false, idLardi: '' }))
                 .catch(res => console.log(res.response.data, currentCard.idLardi))
     }
 }
 
-function preparepreparedCard(currentCard) {
+function prepareCard(currentCard) {
     const preparedCard = {
         dateFrom: currentCard.dateFrom,
         contentName: currentCard.contentName,
@@ -111,7 +112,7 @@ function preparepreparedCard(currentCard) {
             break;
         default:
             for (let key in carTypes) {
-                if (key === carType) {
+                if (key === currentCard.bodyTypeId) {
                     preparedCard.bodyTypeId = carTypes[key];
                     break;
                 }

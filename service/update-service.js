@@ -31,8 +31,12 @@ async function updateData() {
     }
 
     // Видаляємо всі опубліковані і закриті заявки
-    let cardsToDelete = await card.find({ published: true, closed: true });
-    cardsToDelete.forEach((item) => { lardiRequest(item, 'delete') });
+    let cardsToDelete = await card.find({ published: true });
+    cardsToDelete.forEach((item) => {
+        if (item.closed || !item.agreedPub) {
+            lardiRequest(item, 'delete')
+        }
+    });
 
     // Відправляємо заявки на Ларді
     let cardsToPublish = await card.find({ needToUpdate: true, agreedPub: true, published: false });
