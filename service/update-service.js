@@ -1,23 +1,23 @@
 const card = require('../models/card');
-const lardiRequest = require('./lardi-service');
 const getPageContent = require('./scraper/puppeteer');
+const LardiRequester = require('./lardi-service')
 
 async function updateData() {
     // Видаляємо всі опубліковані і закриті заявки
     let cardsToDelete = await card.find({ published: true });
     cardsToDelete.forEach((item) => {
         if (item.closed || !item.agreedPub) {
-            lardiRequest(item, 'delete')
+            LardiRequester.delete(item)
         }
     });
 
     // Відправляємо заявки на Ларді
     let cardsToPublish = await card.find({ needToUpdate: true, agreedPub: true, published: false });
-    cardsToPublish.forEach((item) => { lardiRequest(item, 'add') })
+    cardsToPublish.forEach((item) => { LardiRequester.add(item) })
 
     // Оновлюємо заявки
     let cardsToUpdate = await card.find({ needToUpdate: true, agreedPub: true, published: true })
-    cardsToUpdate.forEach((item) => { lardiRequest(item, 'change') })
+    cardsToUpdate.forEach((item) => { LardiRequester.update(item) })
 
     // Всі не закриті заявки відправляємо на перевірку актуальності
     let cardsToCheck = await card.find({ closed: false });
@@ -45,6 +45,9 @@ async function updateData() {
             }
         })
     }
+
+    // Повтор заявок на Ларді
+    LardiRequester.repeat()
 }
 
 module.exports = updateData;
