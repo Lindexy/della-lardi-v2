@@ -27,7 +27,6 @@ app.use('/auth', authRouter);
 
 const port = process.env.PORT || 3000;
 
-
 mongoose.connect(process.env.DB_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
@@ -46,7 +45,7 @@ let ids = ['9221312153642559334'];
 
 async function mainCycle() {
   try {
-    let setup = await serverSettings.find({ _id: '61a9e5936978c794bb685d4b' });
+    let setup = await serverSettings.find({});
     //await card.deleteMany({}) // Костиль для видалення всіх заявок
     if (setup[0].scraping === true) {
       let data = await getPageContent(SITE, ids)// url, arr

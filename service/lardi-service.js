@@ -12,12 +12,18 @@ async function lardiRequest(currentCard, type) {
 
     switch (type) {
         case 'add':
-            await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(cardInfo), { headers })
-                .then(result => card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false, published: true, idLardi: result.data.id }))
-                .catch(res => console.log(res.response.data, cardInfo))
+            try {
+                const result = await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(cardInfo), { headers })
+                await card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false, published: true, idLardi: result.data.id })
+            } catch (errors) {
+                if (errors.response.data) {
+                    console.log(errors.response.data.message + ': ' + currentCard.idDella)
+                } else {
+                    console.log(errors)
+                }
+            }
             break;
         case 'change':
-            console.log('try to update card...');
             await axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published/' + currentCard.idLardi, JSON.stringify(cardInfo), { headers })
                 .then(res => card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false }))
                 .catch(res => console.log(res.response.data, cardInfo))
@@ -101,7 +107,8 @@ function prepareCard(currentCard) {
         'контейнер пустий': '27',
         'металовіз (ломовіз)': '69',
         'щеповіз': '26',
-        'скловіз': '58'
+        'скловіз': '58',
+        'мебльовіз': '34'
     }
     switch (currentCard.bodyTypeId) {
         case 'будь-яка':

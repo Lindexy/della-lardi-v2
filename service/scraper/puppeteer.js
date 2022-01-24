@@ -220,6 +220,8 @@ async function getPageContent(url, ids) {
                 if (paymentPriceSource !== null) {
                     paymentPriceSource.querySelectorAll('div,span').forEach(n => n.remove());
                     fraht.paymentPrice = paymentPriceSource.innerHTML.replace(/\D/g, '');
+                } else {
+                    fraht.paymentPrice = 0
                 }
 
                 // Валюта
