@@ -16,7 +16,7 @@ async function getPageContent(url, ids) {
         const page = await browser.newPage();
         page.setDefaultNavigationTimeout(45000);
 
-        const cookiesString = await fs.readFile('./service/scraper/cookie/cookies.json');
+        const cookiesString = process.env.COOKIES;
         const cookies = JSON.parse(cookiesString);
         // Фукція допису ІД
         cookies.push({
@@ -232,6 +232,8 @@ async function getPageContent(url, ids) {
 
                 if (targetCard.querySelector('.price_tags') !== null) {
                     fraht.payment = targetCard.querySelector('.price_tags').textContent.replace(/\n/g, ' ');
+                } else {
+                    fraht.payment = ''
                 }
 
                 // Вага
@@ -279,7 +281,6 @@ async function getPageContent(url, ids) {
 
 
                 }
-                //console.log(fraht)
                 return fraht;
             }
             function checkRegion(region) {
@@ -310,7 +311,7 @@ async function getPageContent(url, ids) {
             return data;
         })
 
-
+        // Костиль для збереження куків
         //let cookiesToSave = await page.cookies();
         //await fs.writeFile('./cookies.json', JSON.stringify(cookiesToSave, null, 2));
 
