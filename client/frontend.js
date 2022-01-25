@@ -9,6 +9,7 @@ const App = {
             filters: {
                 PDV: false,
                 BG: false,
+                komb: false,
                 minPrice: 0
             }
         }
@@ -68,6 +69,9 @@ const App = {
                 }
                 if (!this.filters.BG) {
                     filtered = filtered.filter(e => !e.payment.includes('Б/г'))
+                }
+                if (!this.filters.komb) {
+                    filtered = filtered.filter(e => !e.payment.includes('Комбінов'))
                 }
                 if (this.exclusion) {
                     let arr = this.exclusion.split(', ')
