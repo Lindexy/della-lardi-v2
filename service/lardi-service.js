@@ -108,6 +108,9 @@ function prepareCard(currentCard) {
         } else if (currentCard.payment.includes('При завантаженні')) {
             preparedCard.paymentMomentId = '2';
         }
+        if (currentCard.payment.includes('ПДВ')) {
+            prepareCard.paymentVat = true;
+        }
         if (currentCard.payment.includes('На картку')) {
             preparedCard.paymentTypeId = '10';
         } else if (currentCard.payment.includes('Б/г')) {
