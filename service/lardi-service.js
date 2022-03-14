@@ -109,7 +109,7 @@ function prepareCard(currentCard) {
             preparedCard.paymentMomentId = '2';
         }
         if (currentCard.payment.includes('ПДВ')) {
-            prepareCard.paymentVat = true;
+            preparedCard.paymentVat = true;
         }
         if (currentCard.payment.includes('На картку')) {
             preparedCard.paymentTypeId = '10';
