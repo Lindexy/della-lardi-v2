@@ -2,7 +2,6 @@
 .env
 ToDo.txt
 node_modules
-client/node_modules
 
 
 # local env files
