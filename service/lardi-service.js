@@ -6,7 +6,6 @@ class LardiRequester {
         this.params = {
             headers: {
                 "Accept": "application/json",
-                "Content-Type": "application/json",
                 "Authorization": process.env.LARDI_KEY
             }
         };
@@ -14,11 +13,11 @@ class LardiRequester {
     async add(currentCard) {
         try {
             const cardInfo = prepareCard(currentCard);
-            const result = await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(cardInfo), this.params);
+            const result = await axios.post('https://api.lardi-trans.com/v2/proposals/my/add/cargo', JSON.stringify(cardInfo), {headers: {"Accept": "application/json","Content-Type": "application/json","Authorization": process.env.LARDI_KEY}});
             await card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false, published: true, idLardi: result.data.id });
         } catch (errors) {
             if (errors.response) {
-                console.log(errors.response.data.message + ': ' + currentCard.idDella)
+                console.log(errors + ': ' + currentCard.idDella)
             } else {
                 console.log(errors)
             }
@@ -27,7 +26,7 @@ class LardiRequester {
     async update(currentCard) {
         try {
             const cardInfo = prepareCard(currentCard);
-            const result = await axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published/' + currentCard.idLardi, JSON.stringify(cardInfo), this.params);
+            const result = await axios.put('https://api.lardi-trans.com/v2/proposals/my/cargo/published/' + currentCard.idLardi, JSON.stringify(cardInfo), {headers: {"Accept": "application/json","Content-Type": "application/json","Authorization": process.env.LARDI_KEY}});
             await card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false, published: true, idLardi: result.data.id });
         } catch (errors) {
             if (errors.response) {
@@ -39,7 +38,7 @@ class LardiRequester {
     }
     async delete(currentCard) {
         try {
-            const result = await axios.post('https://api.lardi-trans.com/v2/proposals/my/basket/throw', JSON.stringify({ cargoIds: [currentCard.idLardi] }), this.params);
+            const result = await axios.post('https://api.lardi-trans.com/v2/proposals/my/basket/throw', JSON.stringify({ cargoIds: [currentCard.idLardi] }), {headers: {"Accept": "application/json","Content-Type": "application/json","Authorization": process.env.LARDI_KEY}});
             await card.updateOne({ idDella: currentCard.idDella }, { needToUpdate: false, agreedPub: false, published: false, idLardi: '' });
         } catch (errors) {
             if (errors.response) {
@@ -51,7 +50,7 @@ class LardiRequester {
     }
     async repeat() {
         try {
-            const result = await axios.get('https://api.lardi-trans.com/v2/proposals/my/cargoes/published', this.params);
+            const result = await axios.get('https://api.lardi-trans.com/v2/proposals/my/cargoes/published', {headers: {"Accept": "application/json", "Authorization": process.env.LARDI_KEY}});
             const ids = [];
             result.data.forEach(element => {
                 if (Date.now() - element.dateRepeat > 3600000) {
@@ -59,10 +58,14 @@ class LardiRequester {
                 }
             });
             if (ids.length > 0) {
-                await axios.post('https://api.lardi-trans.com/v2/proposals/my/repeat', JSON.stringify({ cargoIds: ids }), this.params);
+                await axios.post('https://api.lardi-trans.com/v2/proposals/my/repeat', JSON.stringify({ cargoIds: ids }), {headers: {"Accept": "application/json","Content-Type": "application/json","Authorization": process.env.LARDI_KEY}});
             }
         } catch (errors) {
-            console.log(errors)
+            if (errors.response) {
+                console.log(errors.response.data)
+            } else {
+                console.log(errors)
+            }
         }
     }
 }
