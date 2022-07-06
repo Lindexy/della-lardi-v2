@@ -2,14 +2,6 @@ const axios = require('axios');
 const card = require('../models/card');
 
 class LardiRequester {
-    constructor() {
-        this.params = {
-            headers: {
-                "Accept": "application/json",
-                "Authorization": process.env.LARDI_KEY
-            }
-        };
-    }
     async add(currentCard) {
         try {
             const cardInfo = prepareCard(currentCard);
