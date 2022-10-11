@@ -32,7 +32,7 @@ mongoose
     console.log("Connected to mongoDB");
     app.listen(port, () => console.log(`server started on PORT:${port}`));
     mainCycle();
-    setInterval(() => mainCycle(), 180000);
+    setInterval(() => mainCycle(), 120000);
   });
 
 let SITE = "https://della.com.ua/search";
@@ -44,6 +44,9 @@ async function mainCycle() {
     //await card.deleteMany({}) // Костиль для видалення всіх заявок
     if (setup[0].scraping === true) {
       let data = await getPageContent(SITE, ids); // url, arr
+      if (!data) {
+        console.log("can't load della data");
+      }
       for (let i = 0; i < data.length; i++) {
         let test = new card(data[i]);
         test.save((err, info) => {
