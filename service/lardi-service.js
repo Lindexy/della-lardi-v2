@@ -179,6 +179,7 @@ function prepareCard(currentCard) {
     if (currentCard.payment.includes("На картку")) {
       preparedCard.paymentTypeId = 10;
     } else if (currentCard.payment.includes("Б/г")) {
+      console.log(123);
       preparedCard.paymentTypeId = 4;
     } else if (currentCard.payment.includes("Готівка")) {
       preparedCard.paymentTypeId = 2;
