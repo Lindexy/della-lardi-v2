@@ -169,23 +169,26 @@ function prepareCard(currentCard) {
   }
 
   if (currentCard.payment) {
+    const params = {};
+
     if (currentCard.payment.includes("При розвантаженні")) {
       preparedCard.paymentMomentId = "4";
     } else if (currentCard.payment.includes("При завантаженні")) {
       preparedCard.paymentMomentId = "2";
     }
     if (currentCard.payment.includes("ПДВ")) {
-      preparedCard.paymentVat = true;
+      params.vat = true;
     }
     if (currentCard.payment.includes("На картку")) {
-      preparedCard.paymentTypeId = "10";
+      params.id = "10";
     } else if (currentCard.payment.includes("Б/г")) {
-      preparedCard.paymentTypeId = "4";
+      params.id = "4";
     } else if (currentCard.payment.includes("Готівка")) {
-      preparedCard.paymentTypeId = "2";
+      params.id = "2";
     } else if (currentCard.payment.includes("Софт")) {
-      preparedCard.paymentTypeId = "10";
+      params.id = "10";
     }
+    preparedCard.paymentForms = [params];
   }
 
   let carTypes = {
