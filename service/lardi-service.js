@@ -214,24 +214,30 @@ function prepareCard(currentCard) {
     відкрита: ["63", "64"],
     "будь-яка": ["34", "25", "36", "28", "23"],
   };
-  switch (currentCard.bodyTypeId) {
-    case "будь-яка":
-      preparedCard.bodyGroupId = "1";
+  for (let key in carTypes) {
+    if (key === currentCard.bodyTypeId) {
+      preparedCard.cargoBodyTypeIds = carTypes[key];
       break;
-    case "крита":
-      preparedCard.bodyGroupId = "1";
-      break;
-    case "відкрита":
-      preparedCard.bodyGroupId = "2";
-      break;
-    default:
-      for (let key in carTypes) {
-        if (key === currentCard.bodyTypeId) {
-          cargoBodyTypeIds = carTypes[key];
-          break;
-        }
-      }
+    }
   }
+  // switch (currentCard.bodyTypeId) {
+  //   case "будь-яка":
+  //     preparedCard.bodyGroupId = "1";
+  //     break;
+  //   case "крита":
+  //     preparedCard.bodyGroupId = "1";
+  //     break;
+  //   case "відкрита":
+  //     preparedCard.bodyGroupId = "2";
+  //     break;
+  //   default:
+  //     for (let key in carTypes) {
+  //       if (key === currentCard.bodyTypeId) {
+  //         cargoBodyTypeIds = carTypes[key];
+  //         break;
+  //       }
+  //     }
+  // }
 
   return preparedCard;
 }
