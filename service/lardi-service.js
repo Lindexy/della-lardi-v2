@@ -16,11 +16,13 @@ class LardiRequester {
           },
         }
       );
+      console.log(result);
       await card.updateOne(
         { idDella: currentCard.idDella },
         { needToUpdate: false, published: true, idLardi: result.data.id }
       );
     } catch (errors) {
+      console.log(errors);
       if (errors.response) {
         console.log(errors + ": " + currentCard.idDella);
       } else {
@@ -177,14 +179,13 @@ function prepareCard(currentCard) {
       preparedCard.paymentVat = true;
     }
     if (currentCard.payment.includes("На картку")) {
-      preparedCard.paymentTypeId = 10;
+      preparedCard.paymentTypeId = "10";
     } else if (currentCard.payment.includes("Б/г")) {
-      console.log(123);
-      preparedCard.paymentTypeId = 4;
+      preparedCard.paymentTypeId = "4";
     } else if (currentCard.payment.includes("Готівка")) {
-      preparedCard.paymentTypeId = 2;
+      preparedCard.paymentTypeId = "2";
     } else if (currentCard.payment.includes("Софт")) {
-      preparedCard.paymentTypeId = 10;
+      preparedCard.paymentTypeId = "10";
     }
   }
 
@@ -228,7 +229,7 @@ function prepareCard(currentCard) {
         }
       }
   }
-  console.log(preparedCard);
+
   return preparedCard;
 }
 
