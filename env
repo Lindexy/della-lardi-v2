@@ -1,0 +1,6 @@
+COOKIES=[{"name":"_ga","value":"GA1.3.330184310.1634985374","domain":".della.com.ua","path":"/","size":29,"httpOnly":false,"secure":fa>
+DATABASE_URL=postgres://uzycraoghddyyu:7daba5219221132033790d27a2ec07656a128deef12b86cba11bcb058b260ae5@ec2-52-31-201-170.eu-west-1.co>
+DB_URL=mongodb://localhost:27017/dl2
+JWT_ACCESS_SECRET=jwt-secret-key
+JWT_REFRESH_SECRET=jwt-refresh-secret-key
+LARDI_KEY=2KMC4KLY6L5000002157

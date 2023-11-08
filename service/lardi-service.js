@@ -16,13 +16,12 @@ class LardiRequester {
           },
         }
       );
-      console.log(result);
       await card.updateOne(
         { idDella: currentCard.idDella },
         { needToUpdate: false, published: true, idLardi: result.data.id }
       );
     } catch (errors) {
-      console.log(errors);
+      console.log(errors.response.data);
       if (errors.response) {
         console.log(errors + ": " + currentCard.idDella);
       } else {
@@ -222,12 +221,14 @@ function prepareCard(currentCard) {
       preparedCard.bodyGroupId = "2";
       break;
     default:
+      const bodyTypesIds = [];
       for (let key in carTypes) {
         if (key === currentCard.bodyTypeId) {
-          preparedCard.bodyTypeId = carTypes[key];
+          bodyTypesIds.push(carTypes[key]);
           break;
         }
       }
+      preparedCard.cargoBodyTypeIds = bodyTypesIds;
   }
 
   return preparedCard;
