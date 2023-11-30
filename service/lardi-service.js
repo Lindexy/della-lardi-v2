@@ -181,13 +181,17 @@ function prepareCard(currentCard) {
     }
     if (currentCard.payment.includes("На картку")) {
       params.id = "10";
-    } else if (currentCard.payment.includes("Б/г")) {
+    } else if (currentCard.payment.includes("Безготівковий")) {
       params.id = "4";
     } else if (currentCard.payment.includes("Готівка")) {
       params.id = "2";
     } else if (currentCard.payment.includes("Софт")) {
       params.id = "10";
     }
+    else if (currentCard.payment.includes("Комбінов.")) {
+      // params.id = "10";
+    }
+
     preparedCard.paymentForms = [params];
   }
 
