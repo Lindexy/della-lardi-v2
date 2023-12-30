@@ -239,7 +239,7 @@ async function getPageContent(url, ids) {
 				let dateFrom2 = targetCard
 					.querySelector(".date_add")
 					.innerHTML.substring(1, 3);
-				fraht.dateFrom = "2023-" + dateFrom1 + "-" + dateFrom2;
+				fraht.dateFrom = "2024-" + dateFrom1 + "-" + dateFrom2;
 
 				let dateTo1 = targetCard
 					.querySelector(".date_add")
@@ -248,7 +248,7 @@ async function getPageContent(url, ids) {
 					.querySelector(".date_add")
 					.innerHTML.substring(7, 9);
 				if (dateTo1 > 0) {
-					fraht.dateTo = "2023-" + dateTo1 + "-" + dateTo2;
+					fraht.dateTo = "2024-" + dateTo1 + "-" + dateTo2;
 				}
 
 				// Назва грузу
