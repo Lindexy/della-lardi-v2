@@ -10,6 +10,7 @@ const apiRouter = require("./routes/apiRouter");
 const homeRouter = require("./routes/homeRouter");
 const card = require("./models/card");
 const serverSettings = require("./models/serverSettings");
+const createServerSettings = require("./service/helper/utility/createServerSettings");
 
 const app = express();
 
@@ -29,9 +30,10 @@ mongoose
     useNewUrlParser: true,
     autoIndex: true,
   })
-  .then(() => {
+  .then(async () => {
     console.log("Connected to mongoDB");
     app.listen(port, () => console.log(`server started on PORT:${port}`));
+    await createServerSettings();
     mainCycle();
     setInterval(() => mainCycle(), 120000);
   });
