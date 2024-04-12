@@ -136,7 +136,7 @@ function prepareCard(currentCard) {
     preparedCard.sizeVolumeFrom = currentCard.sizeVolumeFrom;
   }
   if (currentCard.paymentPrice) {
-    preparedCard.paymentPrice = currentCard.paymentPrice;
+    preparedCard.paymentValue = currentCard.paymentPrice;
   }
   if (currentCard.paymentCurrencyId) {
     preparedCard.paymentCurrencyId = currentCard.paymentCurrencyId;
