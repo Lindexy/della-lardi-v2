@@ -2,192 +2,225 @@ const puppeteer = require("puppeteer");
 const fs = require("fs").promises;
 
 const LAUNCH_PUPPETEER_OPTS = {
-	headless: true,
-	defaultViewport: null,
+	// headless: false,
+	// defaultViewport:  null,
+	//	1976ahsatan
+	//	nunya1976
 	args: ["--no-sandbox"],
 };
 
 // Використувується для :
 // -відкрити пошук, получити всі закази
 // -відкрити відмічені, получити всі закази
-async function getPageContent(url, ids) {
+async function getPageContent() {
 	try {
+		// console.log("getPageContent");
 		const browser = await puppeteer.launch(LAUNCH_PUPPETEER_OPTS);
 		const page = await browser.newPage();
 		page.setDefaultNavigationTimeout(90000);
 
 		const cookies = [
 			{
-				name: "_ga",
-				value: "GA1.3.330184310.1634985374",
-				domain: ".della.com.ua",
-				path: "/",
-				size: 29,
-				httpOnly: false,
-				secure: false,
-				session: false,
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "ph_phc_o6INYGy022Ci8EvkOICZ3NggKWOnskhvpI1ZowGRcr0_posthog",
+			  "value": "%7B%22distinct_id%22%3A%222414103163020509129%22%2C%22%24sesid%22%3A%5B1723790255629%2C%22019159e7-baf0-74ae-b9a9-92733eb268e3%22%2C1723790244592%5D%2C%22%24epp%22%3Atrue%7D",
+			  "domain": ".della.com.ua",
+			  "path": "/",
+			  "expires": 1755326255,
+			  "size": 231,
+			  "httpOnly": false,
+			  "secure": true,
+			  "session": false,
+			  "sameSite": "Lax",
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
 			{
-				name: "_ga_RDFYM13DNV",
-				value: "GS1.1.1643107786.2.1.1643107806.0",
-				domain: ".della.com.ua",
-				path: "/",
-				size: 47,
-				httpOnly: false,
-				secure: false,
-				session: false,
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "2414103163020509129@2422809372407037971_t",
+			  "value": "HbQWtxnAnXMKNUSCnzAv8idzi9b8ewYLEclBnyd5LALayn+WHn8EYzGmMAl9jfihaRLMVkOhs1wLjxQuAVOO2MzMZwRXdELq+U0qBgszNGLpfQ==",
+			  "domain": ".della.com.ua",
+			  "path": "/",
+			  "expires": 1755326256,
+			  "size": 153,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": false,
+			  "sameSite": "Lax",
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
 			{
-				name: "mySRClassic",
-				value: "9221312153642559334",
-				domain: ".della.com.ua",
-				path: "/",
-				size: 30,
-				httpOnly: false,
-				secure: false,
-				session: true,
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "_ga",
+			  "value": "GA1.1.655217434.1723790245",
+			  "domain": ".della.com.ua",
+			  "path": "/",
+			  "expires": 1758350244.562714,
+			  "size": 29,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": false,
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
 			{
-				name: "mpsf",
-				value:
-					"YToxOntzOjM6ImFkdiI7YTo2OntpOjE7czoxNzI6ImNmPTIwNHx8fHx8fHwmY3Q9MjA0fHx8fHx8fCZyZj18fHx8fHx8JnJ0PXx8fHx8fHwmY2lmPXx8fHx8fHwmY2l0PXx8fHx8fHwmdD0wfHwmdz18JmM9fCZkPXwmejE9MSZ6Mj0xJnozPSZ6ND0mejU9MSZ6Nj0wJno3PSZ6OD0mejk9JnkxPSZ5Mj0meTM9Jm89Jm49MSZ1PTIwMjEtMTAtMjMgMTM6NDM6MjMiO2k6MjtOO2k6MztOO2k6NDtOO2k6NTtOO2k6NjtOO319",
-				domain: ".della.com.ua",
-				path: "/",
-				size: 320,
-				httpOnly: false,
-				secure: false,
-				session: true,
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "sessionid",
+			  "value": "wp8y4isd4bcz93q8ik2rxfz5jzt9rzwx",
+			  "domain": "della.com.ua",
+			  "path": "/",
+			  "expires": 1724999855.604341,
+			  "size": 41,
+			  "httpOnly": true,
+			  "secure": true,
+			  "session": false,
+			  "sameSite": "Lax",
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
 			{
-				name: "dasc",
-				value:
-					"YTo3OntzOjc6InVzZXJfaWQiO3M6MTc6IjIyMDE4MTgxNzM0MzAyNzIyIjtzOjU6ImxvZ2luIjtzOjI4OiJuYXRhbGthc3RlbG1hc2NodWtAZ21haWwuY29tIjtzOjM6InB3ZCI7czozMjoiYWJhYzg1ZTRmNWE5YzkyOGI1NDgyZjUwOTUyNTFlYjIiO3M6MTU6ImRhdGVfdmlzaXRfbGFzdCI7czoxOToiMjAyMi0wMS0yNSAxMjo1MDowNyI7czoxNjoibGFzdF9vbmxpbmVfdGltZSI7aToxNjQzMTA3ODA3O3M6MTM6ImlzX2Jsb2NrX3VzZXIiO3M6MToiMCI7czozOiJvY2MiO3M6MToiMCI7fQ%3D%3D",
-				domain: ".della.com.ua",
-				path: "/",
-				size: 380,
-				httpOnly: false,
-				secure: false,
-				session: false,
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "_ga_RDFYM13DNV",
+			  "value": "GS1.1.1723790244.1.1.1723790255.0.0.0",
+			  "domain": ".della.com.ua",
+			  "path": "/",
+			  "expires": 1758350255.54265,
+			  "size": 51,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": false,
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
 			{
-				name: "_gid",
-				value: "GA1.3.1889202676.1634985374",
-				domain: ".della.com.ua",
-				path: "/",
-				size: 31,
-				httpOnly: false,
-				secure: false,
-				session: false,
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "dasc",
+			  "value": "YTo3OntzOjc6InVzZXJfaWQiO3M6MTk6IjI0MTQxMDMxNjMwMjA1MDkxMjkiO3M6NToibG9naW4iO3M6MTE6IjE5NzZhaHNhdGFuIjtzOjM6InB3ZCI7czozMjoiYWJhYzg1ZTRmNWE5YzkyOGI1NDgyZjUwOTUyNTFlYjIiO3M6MTU6ImRhdGVfdmlzaXRfbGFzdCI7czoxOToiMjAyNC0wOC0xNiAwOTozNzozNSI7czoxNjoibGFzdF9vbmxpbmVfdGltZSI7aToxNzIzNzkwMjU1O3M6MTM6ImlzX2Jsb2NrX3VzZXIiO3M6MToiMCI7czozOiJvY2MiO3M6MToiMCI7fQ%3D%3D",
+			  "domain": ".della.com.ua",
+			  "path": "/",
+			  "expires": 1755326255.226616,
+			  "size": 360,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": false,
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
 			{
-				name: "PHPSESSID",
-				value: "2kfb4hu079s8eial517gu1ite3",
-				domain: "della.com.ua",
-				path: "/",
-				size: 35,
-				httpOnly: false,
-				secure: false,
-				session: true,
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "intercom-device-id-qcp5tj0k",
+			  "value": "3bff635e-7f63-43d1-b208-474f27752eec",
+			  "domain": ".della.com.ua",
+			  "path": "/",
+			  "expires": 1747120256,
+			  "size": 63,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": false,
+			  "sameSite": "Lax",
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
 			{
-				name: "_pk_ses.3.744f",
-				value: "1",
-				domain: "della.com.ua",
-				path: "/",
-				size: 15,
-				httpOnly: false,
-				secure: false,
-				session: false,
-				sameSite: "Lax",
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "intercom-id-qcp5tj0k",
+			  "value": "3cdcfd62-e582-481f-b56b-cf2f65aabe47",
+			  "domain": ".della.com.ua",
+			  "path": "/",
+			  "expires": 1747120245,
+			  "size": 56,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": false,
+			  "sameSite": "Lax",
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
 			{
-				name: "_pk_id.3.744f",
-				value: "8a53caf4cad0e72e.1634985374.",
-				domain: "della.com.ua",
-				path: "/",
-				size: 41,
-				httpOnly: false,
-				secure: false,
-				session: false,
-				sameSite: "Lax",
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "_pk_id.3.744f",
+			  "value": "beb49f1d298ade47.1723790245.",
+			  "domain": "della.com.ua",
+			  "path": "/",
+			  "expires": 1757745445,
+			  "size": 41,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": false,
+			  "sameSite": "Lax",
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
 			{
-				name: "della_request_v2",
-				value:
-					"YToxOntzOjM6IkNJRCI7czoxOToiMjEyOTUxMzM2MTQ0NjM0MzkyOSI7fQ%3D%3D",
-				domain: ".della.com.ua",
-				path: "/",
-				expires: -1,
-				size: 80,
-				httpOnly: false,
-				secure: false,
-				session: true,
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "della_request_v2",
+			  "value": "YToxOntzOjM6IkNJRCI7czoxOToiMjQyMjgwOTM3MjQwNzAzNzk3MSI7fQ%3D%3D",
+			  "domain": ".della.com.ua",
+			  "path": "/",
+			  "expires": 1758350244.081158,
+			  "size": 80,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": false,
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
 			{
-				name: "rcop",
-				value: "czoxOiIyIjs%3D",
-				domain: ".della.com.ua",
-				path: "/",
-				expires: -1,
-				size: 18,
-				httpOnly: false,
-				secure: false,
-				session: true,
-				sameParty: false,
-				sourceScheme: "Secure",
-				sourcePort: 443,
+			  "name": "intercom-session-qcp5tj0k",
+			  "value": "cHZVeWxGN0paVXEzbVFtdVpVcGZucGFTbnlDYkFlRFhpS05tdmtRUTE3VXVPcW4wQ1pOeVJzNnE3RHYyMVJZVS0tY01ic1hjR1pUcm1ITElsUzh2ZnZkUT09--51aa1b2c603993f75a97d9a67a26ce594de63b2a",
+			  "domain": ".della.com.ua",
+			  "path": "/",
+			  "expires": 1724395056,
+			  "size": 187,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": false,
+			  "sameSite": "Lax",
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
 			},
-		];
-		// Фукція допису ІД
-		cookies.push({
-			name: "mySRClassic",
-			value: ids.join("-"),
-			domain: ".della.com.ua",
-			path: "/",
-			size: 28,
-			httpOnly: false,
-			secure: false,
-			session: false,
-			sameParty: false,
-			sourceScheme: "Secure",
-			sourcePort: 443,
-		});
+			{
+			  "name": "_pk_ses.3.744f",
+			  "value": "1",
+			  "domain": "della.com.ua",
+			  "path": "/",
+			  "expires": 1723792055,
+			  "size": 15,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": false,
+			  "sameSite": "Lax",
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
+			},
+			{
+			  "name": "PHPSESSID",
+			  "value": "r3v5djmvkc0a3budhd4npmd6u7",
+			  "domain": "della.com.ua",
+			  "path": "/",
+			  "expires": -1,
+			  "size": 35,
+			  "httpOnly": false,
+			  "secure": false,
+			  "session": true,
+			  "priority": "Medium",
+			  "sameParty": false,
+			  "sourceScheme": "Secure"
+			}
+		  ]
 
 		//console.log(cookies);
 		await page.setCookie(...cookies);
-		await page.goto(url);
+		await page.goto("https://della.com.ua/search/selected/");
 
-		//await sleep(60000)
+		// await sleep(60000)
+
+		// await page.screenshot({
+		// 	path: 'demo.png',
+		//   });
 
 		// Передаємо на сайт код який створить і поверне масив обєктів з всіма данними фрахтів.
 		let data = await page.evaluate(() => {
@@ -515,9 +548,10 @@ async function getPageContent(url, ids) {
 		});
 
 		// Костиль для збереження куків
-		//let cookiesToSave = await page.cookies();
-		//await fs.writeFile('./cookies.json', JSON.stringify(cookiesToSave, null, 2));
-
+		// let cookiesToSave = await page.cookies();
+		// await fs.writeFile('./cookies.json', JSON.stringify(cookiesToSave, null, 2));
+		// console.log(data);
+		
 		await browser.close();
 		return data;
 	} catch (error) {

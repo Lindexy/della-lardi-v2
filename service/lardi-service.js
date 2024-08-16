@@ -3,6 +3,8 @@ const card = require("../models/card");
 
 class LardiRequester {
   async add(currentCard) {
+    console.log('adding card');
+    
     try {
       const cardInfo = prepareCard(currentCard);
       const result = await axios.post(

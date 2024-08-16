@@ -1,4 +1,3 @@
-//my test change
 require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -8,7 +7,7 @@ const updateData = require("./service/update-service");
 
 const apiRouter = require("./routes/apiRouter");
 const homeRouter = require("./routes/homeRouter");
-const card = require("./models/card");
+const Card = require("./models/card");
 const serverSettings = require("./models/serverSettings");
 const createServerSettings = require("./service/helper/utility/createServerSettings");
 
@@ -38,24 +37,21 @@ mongoose
     setInterval(() => mainCycle(), 120000);
   });
 
-let SITE = "https://della.com.ua/search";
-let ids = ["9221312153642559334"];
-
 async function mainCycle() {
+  // return await Card.deleteMany({}) // Костиль для видалення всіх заявок
+
   try {
-    let setup = await serverSettings.find({});
-    //await card.deleteMany({}) // Костиль для видалення всіх заявок
-    if (setup[0].scraping === true) {
-      let data = await getPageContent(SITE, ids); // url, arr
+      let data = await getPageContent();
       if (!data) {
         console.log("can't load della data");
       }
       for (let i = 0; i < data.length; i++) {
-        let test = new card(data[i]);
+        let test = new Card(data[i]);
+        test.needToUpdate = true;
+        test.agreedPub = true;
         test.save((err, info) => {
           //if (err) { console.log('err') }
         });
-      }
     }
     updateData();
   } catch (error) {
