@@ -6,7 +6,7 @@ class LardiRequester {
     console.log('adding card');
     
     try {
-      const cardInfo = prepareCard(currentCard);
+      const cardInfo = prepareCard(currentCard);      
       const result = await axios.post(
         "https://api.lardi-trans.com/v2/proposals/my/add/cargo",
         JSON.stringify(cardInfo),
@@ -82,11 +82,14 @@ class LardiRequester {
       }
     }
   }
+
   async repeat() {
     try {
       const result = await axios.get("https://api.lardi-trans.com/v2/proposals/my/cargoes/published", {
         headers: { Accept: "application/json", Authorization: process.env.LARDI_KEY },
       });
+      // console.log(JSON.stringify(result.data.content, null, 2));
+      
       const ids = [];
       result.data.content.forEach((element) => {
         if (Date.now() - element.dateRepeat > 3600000) {
@@ -125,12 +128,16 @@ function prepareCard(currentCard) {
   } else {
     preparedCard.dateTo = currentCard.dateFrom;
   }
+
   if (currentCard.sizeMassTo) {
     preparedCard.sizeMassTo = currentCard.sizeMassTo;
   }
   if (currentCard.sizeMassFrom) {
-    preparedCard.sizeMassFrom = currentCard.sizeMassFrom;
+    preparedCard.sizeMassFrom =  currentCard.sizeMassFrom;
+  } else {
+    preparedCard.sizeMassFrom = currentCard.sizeMassTo
   }
+
   if (currentCard.sizeVolumeTo) {
     preparedCard.sizeVolumeTo = currentCard.sizeVolumeTo;
   }
@@ -207,6 +214,7 @@ function prepareCard(currentCard) {
     автовоз: ["20"],
     бортова: ["63"],
     зерновоз: ["26"],
+    "зерновоз-самоскид": ["26", "33"],
     контейнеровіз: ["28"],
     лісовоз: ["42"],
     негабарит: ["30"],
@@ -248,6 +256,8 @@ function prepareCard(currentCard) {
   //     }
   // }
 
+  // console.log(preparedCard);
+  
   return preparedCard;
 }
 

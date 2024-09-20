@@ -2,8 +2,8 @@ const puppeteer = require("puppeteer");
 const fs = require("fs").promises;
 
 const LAUNCH_PUPPETEER_OPTS = {
-	// headless: false,
-	// defaultViewport:  null,
+	headless: true,
+	defaultViewport:  null,
 	//	1976ahsatan
 	//	nunya1976
 	args: ["--no-sandbox"],
@@ -17,7 +17,7 @@ async function getPageContent() {
 		// console.log("getPageContent");
 		const browser = await puppeteer.launch(LAUNCH_PUPPETEER_OPTS);
 		const page = await browser.newPage();
-		page.setDefaultNavigationTimeout(90000);
+		page.setDefaultNavigationTimeout(1200000);
 
 		const cookies = [
 			{
