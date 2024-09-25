@@ -7,6 +7,9 @@ class LardiRequester {
     
     try {
       const cardInfo = prepareCard(currentCard);      
+      // return
+      //  console.log(cardInfo);
+      
       const result = await axios.post(
         "https://api.lardi-trans.com/v2/proposals/my/add/cargo",
         JSON.stringify(cardInfo),
@@ -130,20 +133,23 @@ function prepareCard(currentCard) {
   }
 
   if (currentCard.sizeMassTo) {
-    preparedCard.sizeMassTo = currentCard.sizeMassTo;
-  }
-  if (currentCard.sizeMassFrom) {
-    preparedCard.sizeMassFrom =  currentCard.sizeMassFrom;
+    preparedCard.sizeMass = currentCard.sizeMassTo;
   } else {
-    preparedCard.sizeMassFrom = currentCard.sizeMassTo
+    preparedCard.sizeMass = currentCard.sizeMassFrom;
   }
+  // if (currentCard.sizeMassFrom) {
+  //   preparedCard.sizeMassFrom =  currentCard.sizeMassFrom;
+  // } else {
+  //   preparedCard.sizeMassFrom = currentCard.sizeMassTo
+  // }
 
   if (currentCard.sizeVolumeTo) {
-    preparedCard.sizeVolumeTo = currentCard.sizeVolumeTo;
+    preparedCard.sizeVolume = currentCard.sizeVolumeTo;
   }
-  if (currentCard.sizeVolumeFrom) {
-    preparedCard.sizeVolumeFrom = currentCard.sizeVolumeFrom;
-  }
+  // if (currentCard.sizeVolumeFrom) {
+  //   preparedCard.sizeVolume = currentCard.sizeVolumeFrom;
+  // }
+
   if (currentCard.paymentPrice) {
     preparedCard.paymentValue = currentCard.paymentPrice;
   }
